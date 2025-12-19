@@ -20,7 +20,7 @@
 <body>
 
     <div class="container">
-        <h1>Mundoo.Cine Randomizer</h1>
+        <h1>Cine Randomizer</h1>
         <div id="movie-display">
             <p id="placeholder">¿No sabés qué ver?<br>Tocá el botón para recibir una sugerencia.</p>
             <div id="movie-info" style="display: none;">
