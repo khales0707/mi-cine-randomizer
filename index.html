@@ -3,62 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Qué miramos hoy? - Cine Randomizer</title>
+    <title>Cine Randomizer</title>
     <style>
-        /* ESTILO: Aquí manejamos cómo se ve la página */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
-        .container { background-color: #1e1e1e; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 400px; width: 90%; }
-        h1 { color: #e50914; margin-bottom: 20px; }
-        #movie-display { min-height: 150px; display: flex; flex-direction: column; justify-content: center; border: 1px dashed #444; margin-bottom: 20px; padding: 10px; border-radius: 10px; }
-        .title { font-size: 1.5rem; font-weight: bold; color: #fff; margin-bottom: 5px; }
-        .info { font-size: 0.9rem; color: #aaa; }
-        button { background-color: #e50914; color: white; border: none; padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: transform 0.2s, background-color 0.2s; }
-        button:hover { background-color: #b20710; transform: scale(1.05); }
-        button:active { transform: scale(0.95); }
+        /* Estilo moderno y oscuro */
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            background-color: #141414; /* Negro tipo Netflix */
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .card {
+            background-color: #262626;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 { color: #E50914; margin-bottom: 30px; }
+        #movie-result {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 60px;
+            color: #fff;
+        }
+        button { 
+            background-color: #E50914; 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            border-radius: 5px; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background-color: #f40612; transform: scale(1.05); }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Mundoo.Cine Randomizer</h1>
-        <div id="movie-display">
-            <p id="placeholder">¿No sabés qué ver?<br>Tocá el botón para recibir una sugerencia.</p>
-            <div id="movie-info" style="display: none;">
-                <div class="title" id="movie-title"></div>
-                <div class="info" id="movie-details"></div>
-            </div>
-        </div>
-        <button onclick="generarPelicula()">¡SORPRENDEME!</button>
+    <div class="card">
+        <h1>RUEL-CINE</h1>
+        <div id="movie-result">¿Qué miramos hoy?</div>
+        <button onclick="sortear()">¡SORPRENDEME!</button>
     </div>
 
     <script>
-        // LISTA DE PELÍCULAS: Aquí es donde vos agregás tus favoritas
         const peliculas = [
-            { titulo: "Esperando la Carroza", año: 1985, genero: "Comedia / Argentina" },
-            { titulo: "El Secreto de sus Ojos", año: 2009, genero: "Drama / Suspenso" },
-            { titulo: "Pulp Fiction", año: 1994, genero: "Crimen / Culto" },
-            { titulo: "Mad Max: Fury Road", año: 2015, genero: "Acción" },
-            { titulo: "Parasite", año: 2019, genero: "Thriller / Social" },
-            { titulo: "The Truman Show", año: 1998, genero: "Drama / Comedia" },
-            { titulo: "Spider-Man: Into the Spider-Verse", año: 2018, genero: "Animación" }
+            "Esperando la Carroza",
+            "El Secreto de sus Ojos",
+            "Relatos Salvajes",
+            "Nueve Reinas",
+            "Pulp Fiction",
+            "The Truman Show"
         ];
 
-        function generarPelicula() {
-            const display = document.getElementById('movie-display');
-            const placeholder = document.getElementById('placeholder');
-            const movieInfo = document.getElementById('movie-info');
-            const titleElement = document.getElementById('movie-title');
-            const detailsElement = document.getElementById('movie-details');
-
-            // Elegir una al azar
+        function sortear() {
             const indice = Math.floor(Math.random() * peliculas.length);
-            const peli = peliculas[indice];
-
-            // Mostrar el resultado con un efecto simple
-            placeholder.style.display = 'none';
-            movieInfo.style.display = 'block';
-            titleElement.innerText = peli.titulo;
-            detailsElement.innerText = peli.año + " • " + peli.genero;
+            document.getElementById('movie-result').innerText = peliculas[indice];
         }
     </script>
 </body>
