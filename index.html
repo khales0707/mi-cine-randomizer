@@ -5,128 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
-        /* ESTILOS GENERALES */
+        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.9); }
+
         body { 
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-            margin: 0;
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh;
-            color: white; 
-            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('fondo.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
+            margin: 0; display: flex; align-items: center; justify-content: center; 
+            min-height: 100vh; color: white; 
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('fondo.jpg') center/cover fixed;
         }
 
-        /* EL RECUADRO CENTRAL */
         .card {
-            background-color: rgba(0, 0, 0, 0.85); 
-            padding: 60px 25px 30px 25px;
-            border-radius: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,1);
-            text-align: center;
-            max-width: 380px;
-            width: 85%;
-            border: 1px solid #444;
-            position: relative;
-            margin: 60px 15px 20px 15px;
+            background-color: var(--bg-card); 
+            padding: 40px 30px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-width: 800px; width: 90%; border: 1px solid #333;
+            position: relative; margin: 20px;
         }
 
-        /* EL AVATAR CIRCULAR */
-        .avatar-container {
-            position: absolute;
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 2px solid #6c70b0; 
-            overflow: hidden;
-            background-color: #000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        /* DISEÑO FLEXBOX PARA EL CONTENIDO */
+        .movie-content {
+            display: flex; gap: 30px; text-align: left; margin: 20px 0;
+            flex-wrap: wrap; /* Para que baje en móviles */
         }
 
-        .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
-
-        h1 { color: #6c70b0; margin: 15px 0 0 0; font-size: 1.8rem; text-transform: none; }
-        .subtitle { margin: 5px 0 15px 0; font-size: 0.9rem; color: #aaa; font-weight: 300; }
-
-        /* CONTENEDOR DE RESULTADO */
-        #movie-result-container {
-            margin: 20px 0;
-            min-height: 100px;
-        }
+        .poster-side { flex: 1; min-width: 250px; text-align: center; }
+        .info-side { flex: 2; min-width: 300px; }
 
         #poster {
-            width: 150px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none; 
-            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%; max-width: 280px; border-radius: 12px;
+            display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        #movie-title { font-size: 1.4rem; font-weight: bold; margin-bottom: 10px; }
+        h1#movie-title { color: white; margin: 0 0 5px 0; font-size: 2rem; }
+        .year { color: var(--primary); font-size: 1.2rem; margin-bottom: 15px; display: block; }
         
-        #movie-overview { 
-            font-size: 0.85rem; 
-            color: #ccc; 
-            line-height: 1.4; 
-            max-height: 100px; 
-            overflow-y: auto; 
-            margin-bottom: 20px;
-            padding: 0 10px;
+        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; display: block; margin-top: 15px; }
+        #movie-overview { font-size: 0.9rem; color: #ccc; line-height: 1.5; margin-bottom: 15px; }
+
+        /* ACTORES */
+        .cast-container { display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap; }
+        .actor-item { text-align: center; width: 60px; }
+        .actor-img { 
+            width: 60px; height: 60px; border-radius: 50%; object-fit: cover; 
+            border: 2px solid var(--primary); background: #222;
         }
+        .actor-name { font-size: 0.7rem; color: #aaa; margin-top: 5px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* Personalización del scroll */
-        #movie-overview::-webkit-scrollbar { width: 4px; }
-        #movie-overview::-webkit-scrollbar-thumb { background: #6c70b0; border-radius: 10px; }
-
-        /* EL BOTÓN */
         button { 
-            background-color: #6c70b0; 
-            color: #fff; 
-            border: none; 
-            padding: 16px 20px; 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            border-radius: 4px; 
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-transform: uppercase;
-            touch-action: manipulation; 
+            background-color: var(--primary); color: white; border: none; 
+            padding: 18px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; 
+            cursor: pointer; width: 100%; text-transform: uppercase; transition: 0.3s;
         }
+        button:hover { background-color: #5a5e9a; transform: translateY(-2px); }
+        button:disabled { opacity: 0.5; cursor: wait; }
 
-        button:hover { background-color: #5a5e9a; transform: scale(1.02); }
-        button:disabled { background-color: #444; cursor: not-allowed; opacity: 0.7; }
-
-        @media (max-width: 360px) {
-            h1 { font-size: 1.5rem; }
-            #movie-title { font-size: 1.2rem; }
+        @media (max-width: 600px) {
+            .movie-content { flex-direction: column; align-items: center; text-align: center; }
+            .cast-container { justify-content: center; }
+            h1#movie-title { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div class="avatar-container">
-            <img src="avatar.jpg" alt="Avatar">
-        </div>
+        <div class="movie-content">
+            <div class="poster-side">
+                <img id="poster" src="" alt="Poster">
+            </div>
 
-        <h1>Movie Randomizer</h1>
-        <p class="subtitle">@mundoo.cine</p>
-        
-        <div id="movie-result-container">
-            <img id="poster" src="" alt="Poster">
-            <div id="movie-title">¿Qué miramos hoy?</div>
-            <div id="movie-overview"></div>
+            <div class="info-side">
+                <h1 id="movie-title">¿Qué miramos?</h1>
+                <span id="movie-year" class="year"></span>
+                
+                <p id="movie-overview">Hacé clic en el botón para sortear una película de tu lista de Letterboxd.</p>
+                
+                <div id="extra-info" style="display:none;">
+                    <span class="label">Director</span>
+                    <div id="movie-director"></div>
+                    
+                    <span class="label">Reparto Principal</span>
+                    <div id="movie-cast" class="cast-container"></div>
+                </div>
+            </div>
         </div>
 
         <button id="btn-sortear" onclick="sortear()">¡SORPRENDEME!</button>
@@ -136,75 +97,67 @@
         const API_KEY = 'b9911fb46e0e11491607c279cce876a1';
         let peliculas = [];
 
-        // Función para cargar el JSON generado por el script de Python
         async function cargarPeliculas() {
             try {
-                const respuesta = await fetch('peliculas.json');
-                if (!respuesta.ok) throw new Error("No se encontró peliculas.json");
-                peliculas = await respuesta.json();
-                console.log("Películas cargadas:", peliculas.length);
-            } catch (error) {
-                console.error("Error al cargar JSON:", error);
-                // Respaldo por si el JSON todavía no existe
-                peliculas = ["El Padrino", "Pulp Fiction", "Relatos Salvajes"];
-            }
+                const r = await fetch('peliculas.json');
+                peliculas = await r.json();
+            } catch (e) { console.error("Error cargando JSON"); }
         }
-
-        // Ejecutar carga al iniciar
         cargarPeliculas();
 
-        async function buscarEnTMDB(titulo) {
-            const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(titulo)}&language=es-ES`;
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                return data.results && data.results.length > 0 ? data.results[0] : null;
-            } catch (error) { return null; }
+        async function obtenerDetallesCompletos(titulo) {
+            const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(titulo)}&language=es-ES`;
+            const resp = await fetch(searchUrl);
+            const data = await resp.json();
+            
+            if (data.results && data.results.length > 0) {
+                const movie = data.results[0];
+                // Pedimos créditos (actores y director)
+                const creditsUrl = `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}&language=es-ES`;
+                const creditsResp = await fetch(creditsUrl);
+                const creditsData = await creditsResp.json();
+                
+                return { ...movie, credits: creditsData };
+            }
+            return null;
         }
 
         async function sortear() {
             if (peliculas.length === 0) return;
-
             const btn = document.getElementById('btn-sortear');
-            const titleDisplay = document.getElementById('movie-title');
-            const posterDisplay = document.getElementById('poster');
-            const overviewDisplay = document.getElementById('movie-overview');
-            
             btn.disabled = true;
-            overviewDisplay.innerText = "";
-            posterDisplay.style.display = "none";
 
-            // Animación de barajado
-            let count = 0;
-            const interval = setInterval(() => {
-                const randomName = peliculas[Math.floor(Math.random() * peliculas.length)];
-                titleDisplay.innerText = randomName;
-                count++;
-                if (count >= 12) {
-                    clearInterval(interval);
-                    ejecutarSorteoFinal();
-                }
-            }, 80);
-
-            async function ejecutarSorteoFinal() {
-                const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
-                titleDisplay.innerText = "Sorteando...";
+            const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
+            document.getElementById('movie-title').innerText = "Buscando...";
+            
+            const info = await obtenerDetallesCompletos(seleccionada);
+            
+            if (info) {
+                document.getElementById('movie-title').innerText = info.title;
+                document.getElementById('movie-year').innerText = info.release_date ? info.release_date.split('-')[0] : '';
+                document.getElementById('movie-overview').innerText = info.overview || "Sin sinopsis.";
+                document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${info.poster_path}`;
+                document.getElementById('poster').style.display = "block";
                 
-                const info = await buscarEnTMDB(seleccionada);
+                // Director
+                const director = info.credits.crew.find(person => person.job === 'Director');
+                document.getElementById('movie-director').innerText = director ? director.name : 'No disponible';
                 
-                if (info) {
-                    titleDisplay.innerText = info.title;
-                    overviewDisplay.innerText = info.overview || "Sin sinopsis disponible.";
-                    if (info.poster_path) {
-                        posterDisplay.src = `https://image.tmdb.org/t/p/w500${info.poster_path}`;
-                        posterDisplay.style.display = "block";
-                    }
-                } else {
-                    titleDisplay.innerText = seleccionada;
-                    overviewDisplay.innerText = "No se halló información detallada.";
-                }
-                btn.disabled = false;
+                // Actores (top 4)
+                const castContainer = document.getElementById('movie-cast');
+                castContainer.innerHTML = '';
+                info.credits.cast.slice(0, 4).forEach(actor => {
+                    const imgUrl = actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/60x60?text=?';
+                    castContainer.innerHTML += `
+                        <div class="actor-item">
+                            <img src="${imgUrl}" class="actor-img">
+                            <span class="actor-name">${actor.name}</span>
+                        </div>`;
+                });
+                
+                document.getElementById('extra-info').style.display = "block";
             }
+            btn.disabled = false;
         }
     </script>
 </body>
