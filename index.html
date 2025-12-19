@@ -5,83 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
-        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.9); }
+        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.85); }
 
         body { 
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
             margin: 0; display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; color: white; 
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('fondo.jpg') center/cover fixed;
+            min-height: 100vh; color: white; transition: background 0.8s ease-in-out;
+            background: black; /* Color base */
+            overflow-x: hidden;
         }
 
-        /* CONTENEDOR PRINCIPAL */
+        /* CAPA DE FONDO DIFUMINADO */
+        #dynamic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('fondo.jpg');
+            background-position: center; background-size: cover;
+            filter: blur(8px); transform: scale(1.1);
+            z-index: -1; transition: background-image 0.8s ease;
+        }
+
         .card {
             background-color: var(--bg-card); 
-            padding: 40px; border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-width: 850px; width: 90%; border: 1px solid #333;
-            text-align: center; /* Centra el contenido inicial */
+            padding: 30px; border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            max-width: 800px; width: 92%; border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; backdrop-filter: blur(10px);
+            margin: 20px 0;
         }
 
-        /* EL AVATAR (Recuperado) */
-        .avatar-container { margin-bottom: 20px; }
         .avatar {
-            width: 100px; height: 100px; border-radius: 50%;
-            border: 3px solid var(--primary); object-fit: cover;
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px;
         }
 
-        /* ESTRUCTURA DE LA PELÍCULA */
         .movie-content {
             display: flex; gap: 30px; text-align: left; margin: 25px 0;
-            display: none; /* Se oculta hasta que haya una peli */
+            display: none; animation: fadeIn 0.5s ease;
         }
 
-        .poster-side { flex: 1; min-width: 250px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .poster-side { flex: 1; min-width: 220px; }
+        #poster { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
         .info-side { flex: 2; }
+        h1#movie-title { font-size: 1.8rem; margin: 0; line-height: 1.2; }
+        .year-tag { color: #aaa; font-weight: normal; margin-left: 8px; font-size: 1.4rem; }
+        .original-title { font-style: italic; color: var(--primary); margin-bottom: 12px; display: block; opacity: 0.9; }
+        
+        #movie-overview { font-size: 0.9rem; color: #ddd; line-height: 1.6; margin-bottom: 20px; }
+        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; letter-spacing: 1px; }
 
-        #poster {
-            width: 100%; border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        h1#movie-title { font-size: 2.2rem; margin: 0; }
-        .year { color: var(--primary); font-size: 1.2rem; margin-bottom: 10px; display: block; }
-        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; display: block; margin-top: 15px; }
-        #movie-overview { font-size: 0.95rem; color: #ccc; line-height: 1.5; }
-
-        /* REPARTO */
-        .cast-container { display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap; }
-        .actor-item { text-align: center; width: 60px; }
+        .cast-container { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+        .actor-item { text-align: center; width: 55px; }
         .actor-img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
-        .actor-name { font-size: 0.7rem; color: #aaa; display: block; margin-top: 5px; }
+        .actor-name { font-size: 0.65rem; color: #aaa; display: block; margin-top: 5px; line-height: 1.1; }
 
-        /* BOTÓN */
         button { 
             background-color: var(--primary); color: white; border: none; 
-            padding: 18px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; 
-            cursor: pointer; width: 100%; max-width: 400px; /* Ancho controlado en PC */
+            padding: 16px; font-size: 1rem; font-weight: bold; border-radius: 12px; 
+            cursor: pointer; width: 100%; max-width: 350px;
             text-transform: uppercase; transition: 0.3s; margin-top: 10px;
         }
-        button:hover { background-color: #5a5e9a; transform: scale(1.02); }
+        button:hover { background-color: #5a5e9a; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(108,112,176,0.4); }
 
-        /* MÓVILES */
         @media (max-width: 700px) {
-            .movie-content { flex-direction: column; align-items: center; text-align: center; }
-            .info-side { text-align: center; }
+            .card { padding: 20px; width: 85%; }
+            .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+            .poster-side { min-width: 180px; max-width: 220px; }
             .cast-container { justify-content: center; }
+            h1#movie-title { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
+    <div id="dynamic-bg"></div>
+
     <div class="card">
-        <div class="avatar-container">
-            <img src="avatar.jpg" alt="Avatar" class="avatar">
-        </div>
+        <img src="avatar.jpg" alt="Avatar" class="avatar">
 
         <div id="initial-message">
-            <h1 style="margin-bottom: 10px;">¿Qué miramos?</h1>
-            <p style="color: #888; margin-bottom: 20px;">Hacé clic para elegir una película de tus listas.</p>
+            <h1 style="margin: 0;">¿Qué miramos hoy?</h1>
+            <p style="color: #aaa; margin: 10px 0 25px 0;">Elegí una película al azar de tus listas.</p>
         </div>
 
         <div id="movie-display" class="movie-content">
@@ -89,14 +95,18 @@
                 <img id="poster" src="" alt="Poster">
             </div>
             <div class="info-side">
-                <h1 id="movie-title"></h1>
-                <span id="movie-year" class="year"></span>
+                <h1 id="movie-header">
+                    <span id="movie-title"></span>
+                    <span id="movie-year" class="year-tag"></span>
+                </h1>
+                <span id="movie-original-title" class="original-title"></span>
+                
                 <p id="movie-overview"></p>
                 
-                <span class="label">Director</span>
-                <div id="movie-director" style="font-size: 0.9rem;"></div>
+                <span class="label">Dirección</span>
+                <div id="movie-director" style="font-size: 0.9rem; margin-top: 4px;"></div>
                 
-                <span class="label">Reparto</span>
+                <span class="label">Reparto principal</span>
                 <div id="movie-cast" class="cast-container"></div>
             </div>
         </div>
@@ -109,8 +119,10 @@
         let peliculas = [];
 
         async function cargarPeliculas() {
-            const r = await fetch('peliculas.json');
-            peliculas = await r.json();
+            try {
+                const r = await fetch('peliculas.json');
+                peliculas = await r.json();
+            } catch (e) { console.error("Error cargando JSON"); }
         }
         cargarPeliculas();
 
@@ -118,10 +130,10 @@
             if (peliculas.length === 0) return;
             const btn = document.getElementById('btn-sortear');
             btn.disabled = true;
+            btn.innerText = "BUSCANDO...";
 
             const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
             
-            // Buscamos en la API
             const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(seleccionada)}&language=es-ES`;
             const resp = await fetch(searchUrl);
             const data = await resp.json();
@@ -132,18 +144,30 @@
                 const creditsResp = await fetch(creditsUrl);
                 const creditsData = await creditsResp.json();
 
-                // Mostrar info y ocultar mensaje inicial
+                // Cambiar Fondo
+                if (movie.backdrop_path) {
+                    document.getElementById('dynamic-bg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
+                }
+
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('movie-display').style.display = 'flex';
 
-                // Llenar datos
+                // Título y Año
                 document.getElementById('movie-title').innerText = movie.title;
-                document.getElementById('movie-year').innerText = movie.release_date ? movie.release_date.split('-')[0] : '';
-                document.getElementById('movie-overview').innerText = movie.overview || "Sinopsis no disponible.";
+                document.getElementById('movie-year').innerText = movie.release_date ? `(${movie.release_date.split('-')[0]})` : '';
+                
+                // Título Original (solo si es diferente al título en español)
+                if (movie.original_title && movie.original_title !== movie.title) {
+                    document.getElementById('movie-original-title').innerText = movie.original_title;
+                } else {
+                    document.getElementById('movie-original-title').innerText = "";
+                }
+
+                document.getElementById('movie-overview').innerText = movie.overview || "Sinopsis no disponible en español.";
                 document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
                 
                 const director = creditsData.crew.find(p => p.job === 'Director');
-                document.getElementById('movie-director').innerText = director ? director.name : 'Desconocido';
+                document.getElementById('movie-director').innerText = director ? director.name : 'No disponible';
 
                 const castHtml = creditsData.cast.slice(0, 4).map(actor => `
                     <div class="actor-item">
@@ -154,6 +178,7 @@
                 document.getElementById('movie-cast').innerHTML = castHtml;
             }
             btn.disabled = false;
+            btn.innerText = "¡SORPRENDEME!";
         }
     </script>
 </body>
