@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
+        /* ESTILOS GENERALES */
         body { 
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
             margin: 0;
@@ -21,6 +22,7 @@
             background-repeat: no-repeat;
         }
 
+        /* EL RECUADRO CENTRAL */
         .card {
             background-color: rgba(0, 0, 0, 0.85); 
             padding: 60px 25px 30px 25px;
@@ -34,6 +36,7 @@
             margin: 60px 15px 20px 15px;
         }
 
+        /* EL AVATAR CIRCULAR */
         .avatar-container {
             position: absolute;
             top: -50px;
@@ -53,7 +56,7 @@
         h1 { color: #6c70b0; margin: 15px 0 0 0; font-size: 1.8rem; text-transform: none; }
         .subtitle { margin: 5px 0 15px 0; font-size: 0.9rem; color: #aaa; font-weight: 300; }
 
-        /* CONTENEDOR DE RESULTADO (PÓSTER E INFO) */
+        /* CONTENEDOR DE RESULTADO */
         #movie-result-container {
             margin: 20px 0;
             min-height: 100px;
@@ -63,15 +66,29 @@
             width: 150px;
             border-radius: 8px;
             margin-bottom: 15px;
-            display: none; /* Se muestra solo cuando hay imagen */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            display: none; 
+            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
             margin-left: auto;
             margin-right: auto;
         }
 
         #movie-title { font-size: 1.4rem; font-weight: bold; margin-bottom: 10px; }
-        #movie-overview { font-size: 0.85rem; color: #ccc; line-height: 1.4; max-height: 100px; overflow-y: auto; margin-bottom: 20px; }
+        
+        #movie-overview { 
+            font-size: 0.85rem; 
+            color: #ccc; 
+            line-height: 1.4; 
+            max-height: 100px; 
+            overflow-y: auto; 
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
 
+        /* Personalización del scroll */
+        #movie-overview::-webkit-scrollbar { width: 4px; }
+        #movie-overview::-webkit-scrollbar-thumb { background: #6c70b0; border-radius: 10px; }
+
+        /* EL BOTÓN */
         button { 
             background-color: #6c70b0; 
             color: #fff; 
@@ -88,7 +105,7 @@
         }
 
         button:hover { background-color: #5a5e9a; transform: scale(1.02); }
-        button:disabled { background-color: #444; cursor: not-allowed; }
+        button:disabled { background-color: #444; cursor: not-allowed; opacity: 0.7; }
 
         @media (max-width: 360px) {
             h1 { font-size: 1.5rem; }
@@ -117,26 +134,37 @@
 
     <script>
         const API_KEY = 'b9911fb46e0e11491607c279cce876a1';
-        const peliculas = [
-            "El Padrino", "Cadena Perpetua", "Pulp Fiction", "El Caballero Oscuro", 
-            "Forrest Gump", "Inception", "Parasite", 
-            "El Señor de los Anillos: La Comunidad del Anillo", 
-            "La La Land", "Psycho"
-        ];
+        let peliculas = [];
+
+        // Función para cargar el JSON generado por el script de Python
+        async function cargarPeliculas() {
+            try {
+                const respuesta = await fetch('peliculas.json');
+                if (!respuesta.ok) throw new Error("No se encontró peliculas.json");
+                peliculas = await respuesta.json();
+                console.log("Películas cargadas:", peliculas.length);
+            } catch (error) {
+                console.error("Error al cargar JSON:", error);
+                // Respaldo por si el JSON todavía no existe
+                peliculas = ["El Padrino", "Pulp Fiction", "Relatos Salvajes"];
+            }
+        }
+
+        // Ejecutar carga al iniciar
+        cargarPeliculas();
 
         async function buscarEnTMDB(titulo) {
             const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(titulo)}&language=es-ES`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                return data.results[0]; // Retorna el primer resultado encontrado
-            } catch (error) {
-                console.error("Error buscando en TMDB", error);
-                return null;
-            }
+                return data.results && data.results.length > 0 ? data.results[0] : null;
+            } catch (error) { return null; }
         }
 
         async function sortear() {
+            if (peliculas.length === 0) return;
+
             const btn = document.getElementById('btn-sortear');
             const titleDisplay = document.getElementById('movie-title');
             const posterDisplay = document.getElementById('poster');
@@ -146,33 +174,34 @@
             overviewDisplay.innerText = "";
             posterDisplay.style.display = "none";
 
-            // Efecto rápido de sorteo
-            let i = 0;
-            const intervalo = setInterval(() => {
-                titleDisplay.innerText = peliculas[Math.floor(Math.random() * peliculas.length)];
-                i++;
-                if (i > 10) {
-                    clearInterval(intervalo);
-                    finalizarSorteo();
+            // Animación de barajado
+            let count = 0;
+            const interval = setInterval(() => {
+                const randomName = peliculas[Math.floor(Math.random() * peliculas.length)];
+                titleDisplay.innerText = randomName;
+                count++;
+                if (count >= 12) {
+                    clearInterval(interval);
+                    ejecutarSorteoFinal();
                 }
-            }, 70);
+            }, 80);
 
-            async function finalizarSorteo() {
+            async function ejecutarSorteoFinal() {
                 const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
-                titleDisplay.innerText = "Buscando detalles...";
+                titleDisplay.innerText = "Sorteando...";
                 
                 const info = await buscarEnTMDB(seleccionada);
                 
                 if (info) {
                     titleDisplay.innerText = info.title;
-                    overviewDisplay.innerText = info.overview;
+                    overviewDisplay.innerText = info.overview || "Sin sinopsis disponible.";
                     if (info.poster_path) {
                         posterDisplay.src = `https://image.tmdb.org/t/p/w500${info.poster_path}`;
                         posterDisplay.style.display = "block";
                     }
                 } else {
                     titleDisplay.innerText = seleccionada;
-                    overviewDisplay.innerText = "No se encontró información adicional.";
+                    overviewDisplay.innerText = "No se halló información detallada.";
                 }
                 btn.disabled = false;
             }
