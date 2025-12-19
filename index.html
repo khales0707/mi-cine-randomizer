@@ -14,79 +14,90 @@
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('fondo.jpg') center/cover fixed;
         }
 
+        /* CONTENEDOR PRINCIPAL */
         .card {
             background-color: var(--bg-card); 
-            padding: 40px 30px; border-radius: 20px;
+            padding: 40px; border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-width: 800px; width: 90%; border: 1px solid #333;
-            position: relative; margin: 20px;
+            max-width: 850px; width: 90%; border: 1px solid #333;
+            text-align: center; /* Centra el contenido inicial */
         }
 
-        /* DISEÑO FLEXBOX PARA EL CONTENIDO */
+        /* EL AVATAR (Recuperado) */
+        .avatar-container { margin-bottom: 20px; }
+        .avatar {
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 3px solid var(--primary); object-fit: cover;
+        }
+
+        /* ESTRUCTURA DE LA PELÍCULA */
         .movie-content {
-            display: flex; gap: 30px; text-align: left; margin: 20px 0;
-            flex-wrap: wrap; /* Para que baje en móviles */
+            display: flex; gap: 30px; text-align: left; margin: 25px 0;
+            display: none; /* Se oculta hasta que haya una peli */
         }
 
-        .poster-side { flex: 1; min-width: 250px; text-align: center; }
-        .info-side { flex: 2; min-width: 300px; }
+        .poster-side { flex: 1; min-width: 250px; }
+        .info-side { flex: 2; }
 
         #poster {
-            width: 100%; max-width: 280px; border-radius: 12px;
-            display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 100%; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        h1#movie-title { color: white; margin: 0 0 5px 0; font-size: 2rem; }
-        .year { color: var(--primary); font-size: 1.2rem; margin-bottom: 15px; display: block; }
-        
+        h1#movie-title { font-size: 2.2rem; margin: 0; }
+        .year { color: var(--primary); font-size: 1.2rem; margin-bottom: 10px; display: block; }
         .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; display: block; margin-top: 15px; }
-        #movie-overview { font-size: 0.9rem; color: #ccc; line-height: 1.5; margin-bottom: 15px; }
+        #movie-overview { font-size: 0.95rem; color: #ccc; line-height: 1.5; }
 
-        /* ACTORES */
+        /* REPARTO */
         .cast-container { display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap; }
         .actor-item { text-align: center; width: 60px; }
-        .actor-img { 
-            width: 60px; height: 60px; border-radius: 50%; object-fit: cover; 
-            border: 2px solid var(--primary); background: #222;
-        }
-        .actor-name { font-size: 0.7rem; color: #aaa; margin-top: 5px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .actor-img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .actor-name { font-size: 0.7rem; color: #aaa; display: block; margin-top: 5px; }
 
+        /* BOTÓN */
         button { 
             background-color: var(--primary); color: white; border: none; 
             padding: 18px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; 
-            cursor: pointer; width: 100%; text-transform: uppercase; transition: 0.3s;
+            cursor: pointer; width: 100%; max-width: 400px; /* Ancho controlado en PC */
+            text-transform: uppercase; transition: 0.3s; margin-top: 10px;
         }
-        button:hover { background-color: #5a5e9a; transform: translateY(-2px); }
-        button:disabled { opacity: 0.5; cursor: wait; }
+        button:hover { background-color: #5a5e9a; transform: scale(1.02); }
 
-        @media (max-width: 600px) {
+        /* MÓVILES */
+        @media (max-width: 700px) {
             .movie-content { flex-direction: column; align-items: center; text-align: center; }
+            .info-side { text-align: center; }
             .cast-container { justify-content: center; }
-            h1#movie-title { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div class="movie-content">
+        <div class="avatar-container">
+            <img src="avatar.jpg" alt="Avatar" class="avatar">
+        </div>
+
+        <div id="initial-message">
+            <h1 style="margin-bottom: 10px;">¿Qué miramos?</h1>
+            <p style="color: #888; margin-bottom: 20px;">Hacé clic para elegir una película de tus listas.</p>
+        </div>
+
+        <div id="movie-display" class="movie-content">
             <div class="poster-side">
                 <img id="poster" src="" alt="Poster">
             </div>
-
             <div class="info-side">
-                <h1 id="movie-title">¿Qué miramos?</h1>
+                <h1 id="movie-title"></h1>
                 <span id="movie-year" class="year"></span>
+                <p id="movie-overview"></p>
                 
-                <p id="movie-overview">Hacé clic en el botón para sortear una película de tu lista de Letterboxd.</p>
+                <span class="label">Director</span>
+                <div id="movie-director" style="font-size: 0.9rem;"></div>
                 
-                <div id="extra-info" style="display:none;">
-                    <span class="label">Director</span>
-                    <div id="movie-director"></div>
-                    
-                    <span class="label">Reparto Principal</span>
-                    <div id="movie-cast" class="cast-container"></div>
-                </div>
+                <span class="label">Reparto</span>
+                <div id="movie-cast" class="cast-container"></div>
             </div>
         </div>
 
@@ -98,29 +109,10 @@
         let peliculas = [];
 
         async function cargarPeliculas() {
-            try {
-                const r = await fetch('peliculas.json');
-                peliculas = await r.json();
-            } catch (e) { console.error("Error cargando JSON"); }
+            const r = await fetch('peliculas.json');
+            peliculas = await r.json();
         }
         cargarPeliculas();
-
-        async function obtenerDetallesCompletos(titulo) {
-            const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(titulo)}&language=es-ES`;
-            const resp = await fetch(searchUrl);
-            const data = await resp.json();
-            
-            if (data.results && data.results.length > 0) {
-                const movie = data.results[0];
-                // Pedimos créditos (actores y director)
-                const creditsUrl = `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}&language=es-ES`;
-                const creditsResp = await fetch(creditsUrl);
-                const creditsData = await creditsResp.json();
-                
-                return { ...movie, credits: creditsData };
-            }
-            return null;
-        }
 
         async function sortear() {
             if (peliculas.length === 0) return;
@@ -128,34 +120,38 @@
             btn.disabled = true;
 
             const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
-            document.getElementById('movie-title').innerText = "Buscando...";
             
-            const info = await obtenerDetallesCompletos(seleccionada);
+            // Buscamos en la API
+            const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(seleccionada)}&language=es-ES`;
+            const resp = await fetch(searchUrl);
+            const data = await resp.json();
             
-            if (info) {
-                document.getElementById('movie-title').innerText = info.title;
-                document.getElementById('movie-year').innerText = info.release_date ? info.release_date.split('-')[0] : '';
-                document.getElementById('movie-overview').innerText = info.overview || "Sin sinopsis.";
-                document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${info.poster_path}`;
-                document.getElementById('poster').style.display = "block";
+            if (data.results && data.results.length > 0) {
+                const movie = data.results[0];
+                const creditsUrl = `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}&language=es-ES`;
+                const creditsResp = await fetch(creditsUrl);
+                const creditsData = await creditsResp.json();
+
+                // Mostrar info y ocultar mensaje inicial
+                document.getElementById('initial-message').style.display = 'none';
+                document.getElementById('movie-display').style.display = 'flex';
+
+                // Llenar datos
+                document.getElementById('movie-title').innerText = movie.title;
+                document.getElementById('movie-year').innerText = movie.release_date ? movie.release_date.split('-')[0] : '';
+                document.getElementById('movie-overview').innerText = movie.overview || "Sinopsis no disponible.";
+                document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
                 
-                // Director
-                const director = info.credits.crew.find(person => person.job === 'Director');
-                document.getElementById('movie-director').innerText = director ? director.name : 'No disponible';
-                
-                // Actores (top 4)
-                const castContainer = document.getElementById('movie-cast');
-                castContainer.innerHTML = '';
-                info.credits.cast.slice(0, 4).forEach(actor => {
-                    const imgUrl = actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/60x60?text=?';
-                    castContainer.innerHTML += `
-                        <div class="actor-item">
-                            <img src="${imgUrl}" class="actor-img">
-                            <span class="actor-name">${actor.name}</span>
-                        </div>`;
-                });
-                
-                document.getElementById('extra-info').style.display = "block";
+                const director = creditsData.crew.find(p => p.job === 'Director');
+                document.getElementById('movie-director').innerText = director ? director.name : 'Desconocido';
+
+                const castHtml = creditsData.cast.slice(0, 4).map(actor => `
+                    <div class="actor-item">
+                        <img src="${actor.profile_path ? 'https://image.tmdb.org/t/p/w185' + actor.profile_path : 'https://via.placeholder.com/60'}" class="actor-img">
+                        <span class="actor-name">${actor.name}</span>
+                    </div>
+                `).join('');
+                document.getElementById('movie-cast').innerHTML = castHtml;
             }
             btn.disabled = false;
         }
