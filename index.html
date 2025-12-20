@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
-        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.3); }
+        /* AJUSTE: Subimos a 0.75 para que el cuadro sea bien visible desde el inicio */
+        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.75); }
 
         body { 
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
@@ -13,7 +14,6 @@
             min-height: 100vh; color: white; background: black; overflow-x: hidden;
         }
 
-        /* FONDO ÚNICO: No cambia la imagen, solo la intensidad del negro */
         #dynamic-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondo.jpg');
@@ -23,26 +23,29 @@
 
         .card {
             background-color: var(--bg-card); 
-            padding: 35px; border-radius: 24px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.6);
-            max-width: 800px; width: 90%; border: 1px solid rgba(255,255,255,0.1);
+            padding: 40px 30px; border-radius: 28px;
+            /* Agregamos una sombra un poco más fuerte para que "flote" sobre el fondo */
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            max-width: 800px; width: 90%; 
+            border: 1px solid rgba(255,255,255,0.15); /* Borde un poco más nítido */
             text-align: center; margin: 20px 0;
+            transition: background-color 0.5s ease;
         }
 
-        .avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px; }
+        .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 20px; }
 
         .movie-content { display: flex; gap: 30px; text-align: left; margin: 25px 0; display: none; animation: fadeIn 0.8s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .poster-side { flex: 1; min-width: 220px; }
         #poster { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
 
         .info-side { flex: 2; }
-        h1#movie-title { font-size: 1.8rem; margin: 0; line-height: 1.2; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        h1#movie-title { font-size: 2rem; margin: 0; line-height: 1.2; }
         .year-tag { color: #aaa; font-weight: normal; margin-left: 8px; font-size: 1.4rem; }
         .original-title { font-style: italic; color: var(--primary); margin-bottom: 12px; display: block; }
-        #movie-overview { font-size: 0.95rem; color: #fff; line-height: 1.5; margin-bottom: 20px; }
-        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; }
+        #movie-overview { font-size: 1rem; color: #eee; line-height: 1.6; margin-bottom: 20px; }
+        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; letter-spacing: 1px; }
 
         .cast-container { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
         .actor-item { text-align: center; width: 55px; }
@@ -50,18 +53,18 @@
         .actor-name { font-size: 0.65rem; color: #ddd; display: block; margin-top: 5px; }
 
         button { 
-            background-color: var(--primary); color: white; border: none; padding: 16px; font-size: 1rem; 
-            font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; max-width: 350px;
-            text-transform: uppercase; transition: 0.3s;
+            background-color: var(--primary); color: white; border: none; padding: 18px; font-size: 1.1rem; 
+            font-weight: bold; border-radius: 15px; cursor: pointer; width: 100%; max-width: 380px;
+            text-transform: uppercase; transition: 0.3s; margin-top: 10px;
         }
-        button:hover { background-color: #5a5e9a; transform: translateY(-2px); }
+        button:hover { background-color: #5a5e9a; transform: scale(1.02); }
 
         @media (max-width: 700px) {
-            .card { padding: 25px 20px; width: 88%; }
+            .card { padding: 30px 20px; width: 88%; }
             .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
             .poster-side { min-width: 180px; max-width: 200px; }
             .cast-container { justify-content: center; }
-            h1#movie-title { font-size: 1.6rem; }
+            h1#movie-title { font-size: 1.7rem; }
         }
     </style>
 </head>
@@ -72,8 +75,8 @@
     <div class="card">
         <img src="avatar.jpg" alt="Avatar" class="avatar">
         <div id="initial-message">
-            <h1>¿Qué miramos hoy?</h1>
-            <p style="color: #eee; margin-bottom: 25px;">Elegí una peli al azar</p>
+            <h1 style="margin: 0; font-size: 2.2rem;">¿Qué miramos hoy?</h1>
+            <p style="color: #ccc; margin: 15px 0 30px 0; font-size: 1.1rem;">Elegí una peli al azar</p>
         </div>
 
         <div id="movie-display" class="movie-content">
@@ -83,7 +86,7 @@
                 <span id="movie-original-title" class="original-title"></span>
                 <p id="movie-overview"></p>
                 <span class="label">Dirección</span>
-                <div id="movie-director" style="font-size: 0.95rem;"></div>
+                <div id="movie-director" style="font-size: 1rem; margin-top: 4px;"></div>
                 <span class="label">Reparto principal</span>
                 <div id="movie-cast" class="cast-container"></div>
             </div>
@@ -99,7 +102,7 @@
             try {
                 const r = await fetch('peliculas.json');
                 peliculas = await r.json();
-            } catch (e) { console.error("Error cargando JSON"); }
+            } catch (e) { console.error("Error"); }
         }
         cargarPeliculas();
 
@@ -120,9 +123,9 @@
                 const creditsResp = await fetch(creditsUrl);
                 const creditsData = await creditsResp.json();
 
-                // EFECTO APAGÓN: Oscurecemos el fondo collage
+                // Efecto apagón de fondo
                 const bgElement = document.getElementById('dynamic-bg');
-                bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('fondo.jpg')`;
+                bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('fondo.jpg')`;
 
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('movie-display').style.display = 'flex';
