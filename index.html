@@ -5,47 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
-        /* AJUSTE 3: --bg-card ahora es más transparente (0.7 en vez de 0.85) */
-        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.7); }
+        :root { --primary: #6c70b0; --bg-card: rgba(10, 10, 10, 0.75); }
 
         body { 
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
             margin: 0; display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; color: white;
-            background: black;
-            overflow-x: hidden;
+            min-height: 100vh; color: white; background: black; overflow-x: hidden;
         }
 
-        /* AJUSTE 1: El fondo inicial arranca SIN difuminado (blur(0px)) */
         #dynamic-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('fondo.jpg');
             background-position: center; background-size: cover;
-            filter: blur(0px); transform: scale(1.02); /* Escala mínima para evitar bordes blancos */
-            z-index: -1; transition: all 0.8s ease;
+            filter: blur(0px); transform: scale(1); z-index: -1; transition: all 1s ease;
         }
 
         .card {
-            background-color: var(--bg-card); 
-            padding: 30px; border-radius: 24px;
+            background-color: var(--bg-card); padding: 30px; border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             max-width: 800px; width: 92%; border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; backdrop-filter: blur(10px); /* Efecto vidrio esmerilado */
-            margin: 20px 0;
-            transition: background-color 0.5s ease;
+            text-align: center; backdrop-filter: blur(15px); margin: 20px 0;
         }
 
-        .avatar {
-            width: 80px; height: 80px; border-radius: 50%;
-            border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px;
-        }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px; }
 
-        .movie-content {
-            display: flex; gap: 30px; text-align: left; margin: 25px 0;
-            display: none; animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .movie-content { display: flex; gap: 30px; text-align: left; margin: 25px 0; display: none; animation: fadeIn 0.6s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .poster-side { flex: 1; min-width: 220px; }
         #poster { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -53,30 +38,30 @@
         .info-side { flex: 2; }
         h1#movie-title { font-size: 1.8rem; margin: 0; line-height: 1.2; }
         .year-tag { color: #aaa; font-weight: normal; margin-left: 8px; font-size: 1.4rem; }
-        .original-title { font-style: italic; color: var(--primary); margin-bottom: 12px; display: block; opacity: 0.9; }
-        
+        .original-title { font-style: italic; color: var(--primary); margin-bottom: 12px; display: block; }
         #movie-overview { font-size: 0.9rem; color: #ddd; line-height: 1.6; margin-bottom: 20px; }
-        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; letter-spacing: 1px; }
+        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; }
 
         .cast-container { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
         .actor-item { text-align: center; width: 55px; }
         .actor-img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
-        .actor-name { font-size: 0.65rem; color: #aaa; display: block; margin-top: 5px; line-height: 1.1; }
+        .actor-name { font-size: 0.65rem; color: #aaa; display: block; margin-top: 5px; }
 
         button { 
-            background-color: var(--primary); color: white; border: none; 
-            padding: 16px; font-size: 1rem; font-weight: bold; border-radius: 12px; 
-            cursor: pointer; width: 100%; max-width: 350px;
-            text-transform: uppercase; transition: 0.3s; margin-top: 10px;
+            background-color: var(--primary); color: white; border: none; padding: 16px; font-size: 1rem; 
+            font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; max-width: 350px;
+            text-transform: uppercase; transition: 0.3s;
         }
-        button:hover { background-color: #5a5e9a; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(108,112,176,0.4); }
 
+        /* AJUSTES PARA CELULAR */
         @media (max-width: 700px) {
-            .card { padding: 20px; width: 88%; } /* Un poco más ancho en celus */
-            .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+            .card { padding: 20px; width: 85%; }
+            .movie-content { flex-direction: column; align-items: center; text-align: center; }
             .poster-side { min-width: 180px; max-width: 220px; }
             .cast-container { justify-content: center; }
             h1#movie-title { font-size: 1.6rem; }
+            /* En el celu permitimos que el fondo se vea un poco más */
+            #dynamic-bg { filter: blur(4px) brightness(0.5); }
         }
     </style>
 </head>
@@ -86,33 +71,23 @@
 
     <div class="card">
         <img src="avatar.jpg" alt="Avatar" class="avatar">
-
         <div id="initial-message">
-            <h1 style="margin: 0;">¿Qué miramos hoy?</h1>
-            <p style="color: #ccc; margin: 10px 0 25px 0;">Elegí una película al azar de tus listas.</p>
+            <h1>¿Qué miramos hoy?</h1>
+            <p style="color: #ccc; margin-bottom: 25px;">Elegí una película al azar de tus listas.</p>
         </div>
 
         <div id="movie-display" class="movie-content">
-            <div class="poster-side">
-                <img id="poster" src="" alt="Poster">
-            </div>
+            <div class="poster-side"><img id="poster" src="" alt="Poster"></div>
             <div class="info-side">
-                <h1 id="movie-header">
-                    <span id="movie-title"></span>
-                    <span id="movie-year" class="year-tag"></span>
-                </h1>
+                <h1><span id="movie-title"></span><span id="movie-year" class="year-tag"></span></h1>
                 <span id="movie-original-title" class="original-title"></span>
-                
                 <p id="movie-overview"></p>
-                
                 <span class="label">Dirección</span>
-                <div id="movie-director" style="font-size: 0.9rem; margin-top: 4px;"></div>
-                
+                <div id="movie-director" style="font-size: 0.9rem;"></div>
                 <span class="label">Reparto principal</span>
                 <div id="movie-cast" class="cast-container"></div>
             </div>
         </div>
-
         <button id="btn-sortear" onclick="sortear()">¡SORPRENDEME!</button>
     </div>
 
@@ -121,10 +96,8 @@
         let peliculas = [];
 
         async function cargarPeliculas() {
-            try {
-                const r = await fetch('peliculas.json');
-                peliculas = await r.json();
-            } catch (e) { console.error("Error cargando JSON"); }
+            const r = await fetch('peliculas.json');
+            peliculas = await r.json();
         }
         cargarPeliculas();
 
@@ -135,7 +108,6 @@
             btn.innerText = "BUSCANDO...";
 
             const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
-            
             const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(seleccionada)}&language=es-ES`;
             const resp = await fetch(searchUrl);
             const data = await resp.json();
@@ -146,39 +118,34 @@
                 const creditsResp = await fetch(creditsUrl);
                 const creditsData = await creditsResp.json();
 
-                // AJUSTE 2: Cambiar Fondo y aplicar un difuminado suave (3px)
-                if (movie.backdrop_path) {
-                    const bgElement = document.getElementById('dynamic-bg');
-                    bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
-                    bgElement.style.filter = 'blur(3px)'; // Difuminado suave para que se reconozca la imagen
-                    bgElement.style.transform = 'scale(1.05)';
+                // LÓGICA DE FONDO INTELIGENTE
+                const bgElement = document.getElementById('dynamic-bg');
+                const isMobile = window.innerWidth <= 700;
+                
+                // Si es móvil, usamos el POSTER de fondo. Si es PC, usamos el BACKDROP (escena).
+                const backgroundPath = isMobile ? movie.poster_path : movie.backdrop_path;
+                
+                if (backgroundPath) {
+                    bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://image.tmdb.org/t/p/original${backgroundPath}')`;
+                    bgElement.style.filter = isMobile ? 'blur(10px)' : 'blur(4px)'; 
                 }
 
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('movie-display').style.display = 'flex';
-
-                // Llenar datos
                 document.getElementById('movie-title').innerText = movie.title;
                 document.getElementById('movie-year').innerText = movie.release_date ? `(${movie.release_date.split('-')[0]})` : '';
-                
-                if (movie.original_title && movie.original_title !== movie.title) {
-                    document.getElementById('movie-original-title').innerText = movie.original_title;
-                } else {
-                    document.getElementById('movie-original-title').innerText = "";
-                }
-
-                document.getElementById('movie-overview').innerText = movie.overview || "Sinopsis no disponible en español.";
+                document.getElementById('movie-original-title').innerText = (movie.original_title !== movie.title) ? movie.original_title : "";
+                document.getElementById('movie-overview').innerText = movie.overview || "Sinopsis no disponible.";
                 document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
                 
-                const director = creditsData.crew.find(p => p.job === 'Director');
-                document.getElementById('movie-director').innerText = director ? director.name : 'No disponible';
+                const dir = creditsData.crew.find(p => p.job === 'Director');
+                document.getElementById('movie-director').innerText = dir ? dir.name : 'No disponible';
 
-                const castHtml = creditsData.cast.slice(0, 4).map(actor => `
+                const castHtml = creditsData.cast.slice(0, 4).map(a => `
                     <div class="actor-item">
-                        <img src="${actor.profile_path ? 'https://image.tmdb.org/t/p/w185' + actor.profile_path : 'https://via.placeholder.com/60'}" class="actor-img">
-                        <span class="actor-name">${actor.name}</span>
-                    </div>
-                `).join('');
+                        <img src="${a.profile_path ? 'https://image.tmdb.org/t/p/w185' + a.profile_path : 'https://via.placeholder.com/60'}" class="actor-img">
+                        <span class="actor-name">${a.name}</span>
+                    </div>`).join('');
                 document.getElementById('movie-cast').innerHTML = castHtml;
             }
             btn.disabled = false;
