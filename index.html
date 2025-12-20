@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
-        /* AJUSTE: Fondo negro al 70% de opacidad */
         :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.3); }
 
         body { 
@@ -14,37 +13,35 @@
             min-height: 100vh; color: white; background: black; overflow-x: hidden;
         }
 
-        /* FONDO: Empieza nítido en todos los dispositivos */
+        /* FONDO ÚNICO: No cambia la imagen, solo la intensidad del negro */
         #dynamic-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondo.jpg');
             background-position: center; background-size: cover;
-            filter: blur(0px); z-index: -1; transition: all 0.8s ease;
+            z-index: -1; transition: all 1s ease;
         }
 
         .card {
             background-color: var(--bg-card); 
-            padding: 30px; border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-            max-width: 800px; width: 92%; border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-            /* SE ELIMINÓ EL BACKDROP-FILTER BLUR */
-            margin: 20px 0;
+            padding: 35px; border-radius: 24px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.6);
+            max-width: 800px; width: 90%; border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; margin: 20px 0;
         }
 
         .avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px; }
 
-        .movie-content { display: flex; gap: 30px; text-align: left; margin: 25px 0; display: none; animation: fadeIn 0.6s ease; }
+        .movie-content { display: flex; gap: 30px; text-align: left; margin: 25px 0; display: none; animation: fadeIn 0.8s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .poster-side { flex: 1; min-width: 220px; }
-        #poster { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #poster { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
 
         .info-side { flex: 2; }
-        h1#movie-title { font-size: 1.8rem; margin: 0; line-height: 1.2; }
+        h1#movie-title { font-size: 1.8rem; margin: 0; line-height: 1.2; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
         .year-tag { color: #aaa; font-weight: normal; margin-left: 8px; font-size: 1.4rem; }
         .original-title { font-style: italic; color: var(--primary); margin-bottom: 12px; display: block; }
-        #movie-overview { font-size: 0.95rem; color: #fff; line-height: 1.5; margin-bottom: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+        #movie-overview { font-size: 0.95rem; color: #fff; line-height: 1.5; margin-bottom: 20px; }
         .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; }
 
         .cast-container { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
@@ -60,9 +57,9 @@
         button:hover { background-color: #5a5e9a; transform: translateY(-2px); }
 
         @media (max-width: 700px) {
-            .card { padding: 20px; width: 88%; }
-            .movie-content { flex-direction: column; align-items: center; text-align: center; }
-            .poster-side { min-width: 180px; max-width: 220px; }
+            .card { padding: 25px 20px; width: 88%; }
+            .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+            .poster-side { min-width: 180px; max-width: 200px; }
             .cast-container { justify-content: center; }
             h1#movie-title { font-size: 1.6rem; }
         }
@@ -123,17 +120,9 @@
                 const creditsResp = await fetch(creditsUrl);
                 const creditsData = await creditsResp.json();
 
+                // EFECTO APAGÓN: Oscurecemos el fondo collage
                 const bgElement = document.getElementById('dynamic-bg');
-                const isMobile = window.innerWidth <= 700;
-                
-                // Fondo inteligente: poster en móvil, backdrop en PC
-                const backgroundPath = isMobile ? movie.poster_path : movie.backdrop_path;
-                
-                if (backgroundPath) {
-                    bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://image.tmdb.org/t/p/original${backgroundPath}')`;
-                    // Difuminado muy suave solo para resaltar la tarjeta
-                    bgElement.style.filter = 'blur(3px)';
-                }
+                bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('fondo.jpg')`;
 
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('movie-display').style.display = 'flex';
