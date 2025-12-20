@@ -5,23 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
-        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.85); }
+        /* AJUSTE 3: --bg-card ahora es más transparente (0.7 en vez de 0.85) */
+        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.7); }
 
         body { 
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
             margin: 0; display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; color: white; transition: background 0.8s ease-in-out;
-            background: black; /* Color base */
+            min-height: 100vh; color: white;
+            background: black;
             overflow-x: hidden;
         }
 
-        /* CAPA DE FONDO DIFUMINADO */
+        /* AJUSTE 1: El fondo inicial arranca SIN difuminado (blur(0px)) */
         #dynamic-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('fondo.jpg');
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('fondo.jpg');
             background-position: center; background-size: cover;
-            filter: blur(8px); transform: scale(1.1);
-            z-index: -1; transition: background-image 0.8s ease;
+            filter: blur(0px); transform: scale(1.02); /* Escala mínima para evitar bordes blancos */
+            z-index: -1; transition: all 0.8s ease;
         }
 
         .card {
@@ -29,8 +30,9 @@
             padding: 30px; border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             max-width: 800px; width: 92%; border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; backdrop-filter: blur(10px);
+            text-align: center; backdrop-filter: blur(10px); /* Efecto vidrio esmerilado */
             margin: 20px 0;
+            transition: background-color 0.5s ease;
         }
 
         .avatar {
@@ -70,11 +72,11 @@
         button:hover { background-color: #5a5e9a; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(108,112,176,0.4); }
 
         @media (max-width: 700px) {
-            .card { padding: 20px; width: 85%; }
+            .card { padding: 20px; width: 88%; } /* Un poco más ancho en celus */
             .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
             .poster-side { min-width: 180px; max-width: 220px; }
             .cast-container { justify-content: center; }
-            h1#movie-title { font-size: 1.5rem; }
+            h1#movie-title { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -87,7 +89,7 @@
 
         <div id="initial-message">
             <h1 style="margin: 0;">¿Qué miramos hoy?</h1>
-            <p style="color: #aaa; margin: 10px 0 25px 0;">Elegí una película al azar de tus listas.</p>
+            <p style="color: #ccc; margin: 10px 0 25px 0;">Elegí una película al azar de tus listas.</p>
         </div>
 
         <div id="movie-display" class="movie-content">
@@ -144,19 +146,21 @@
                 const creditsResp = await fetch(creditsUrl);
                 const creditsData = await creditsResp.json();
 
-                // Cambiar Fondo
+                // AJUSTE 2: Cambiar Fondo y aplicar un difuminado suave (3px)
                 if (movie.backdrop_path) {
-                    document.getElementById('dynamic-bg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
+                    const bgElement = document.getElementById('dynamic-bg');
+                    bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
+                    bgElement.style.filter = 'blur(3px)'; // Difuminado suave para que se reconozca la imagen
+                    bgElement.style.transform = 'scale(1.05)';
                 }
 
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('movie-display').style.display = 'flex';
 
-                // Título y Año
+                // Llenar datos
                 document.getElementById('movie-title').innerText = movie.title;
                 document.getElementById('movie-year').innerText = movie.release_date ? `(${movie.release_date.split('-')[0]})` : '';
                 
-                // Título Original (solo si es diferente al título en español)
                 if (movie.original_title && movie.original_title !== movie.title) {
                     document.getElementById('movie-original-title').innerText = movie.original_title;
                 } else {
