@@ -34,18 +34,22 @@
         .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px; }
         
         .social-container {
-            display: flex; flex-direction: column; gap: 8px; margin-bottom: 30px;
+            display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; align-items: center;
         }
 
         .social-link {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            color: #ccc; text-decoration: none; font-weight: 500; font-size: 0.95rem;
-            transition: 0.3s; padding: 5px;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            color: #ccc; text-decoration: none; font-weight: 500; font-size: 1rem;
+            transition: 0.3s; padding: 5px 10px; border-radius: 8px;
         }
-        .social-link:hover { color: white; transform: translateY(-1px); }
+        .social-link:hover { color: white; background: rgba(255,255,255,0.1); transform: translateY(-1px); }
         
-        /* Ajuste el tamaño de los íconos para que se vean parejos */
-        .social-icon { width: 20px; height: 20px; fill: var(--primary); }
+        /* Estilo base para los íconos */
+        .social-icon { width: 24px; height: 24px; }
+        
+        /* El de Instagram se pinta del color primario */
+        .insta-fill { fill: var(--primary); }
+        /* El de Letterboxd ya trae sus propios colores en el SVG */
 
         /* CONTENIDO DE LA PELÍCULA */
         .movie-content { display: flex; gap: 30px; text-align: left; margin: 25px 0; display: none; animation: fadeIn 0.8s ease; }
@@ -91,11 +95,17 @@
         
         <div class="social-container">
             <a href="https://www.instagram.com/mundoo.cine" target="_blank" class="social-link">
-                <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.5 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.9 0-184.9zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                <svg class="social-icon insta-fill" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.5 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.9 0-184.9zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
                 mundoo.cine
             </a>
             <a href="https://boxd.it/37NZT" target="_blank" class="social-link">
-                <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm0 2v2h-2V5h2zm-4 14H9v-2h6v2zm-6-4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2 4h-2v-2h2v2zm0-4h-2v-2h2v2zM5 5h2v2H5V5zm0 4h2v2H5V9zm0 4h2v2H5v-2zm0 4h2v2H5v-2z"/></svg>
+                <svg class="social-icon" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" fill-rule="evenodd">
+                        <circle fill="#00E054" cx="7" cy="19" r="7"/>
+                        <circle fill="#FF8000" cx="19" cy="19" r="7"/>
+                        <circle fill="#40BCF4" cx="31" cy="19" r="7"/>
+                    </g>
+                </svg>
                 mundoo.cine
             </a>
         </div>
