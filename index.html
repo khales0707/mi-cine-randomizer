@@ -1,225 +1,445 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Randomizer - @mundoo.cine</title>
-    <style>
-        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.75); }
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1db954">
+  <meta charset="UTF-8">
+  <title>Randomizer by Mundoo.Cine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        body { 
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-            margin: 0; display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; color: white; background: black; overflow-x: hidden;
-        }
+  <style>
+    html, body { height: 100%; min-height: 100vh; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: url('FONDO.jpg') no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+      background-color: #000;
+      color: #eee;
+      margin: 0; padding: 0; text-align: center;
+    }
+    body::before {
+      content: ""; position: fixed; top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.65); z-index: -1;
+    }
+    .header-personal { margin-top: 20px; text-align: center; }
+    .header-personal .avatar {
+      display: block; margin: 0 auto 15px; width: 100px; height: 100px;
+      border-radius: 50%; object-fit: cover;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5); border: 2px solid #1db954;
+    }
+    .header-box {
+      background: rgba(0,0,0,0.7); padding: 20px 30px; border-radius: 12px;
+      display: block; max-width: 780px; margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3); text-align: center;
+      opacity: 0; transform: translateY(20px);
+      animation: aparecer 0.8s ease-out forwards;
+    }
+    @keyframes aparecer { to { opacity: 1; transform: translateY(0); } }
+    .header-box h1 { font-size: 2.2em; margin: 0; color: #1db954; letter-spacing: 2px; }
+    .header-box .firma { font-size: 1em; color: #ccc; margin-top: 5px; }
+    .controls { padding: 12px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+    .controls .group { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+    input, select, button { padding: 10px 12px; font-size: 16px; margin: 2px; border: none; border-radius: 6px; }
+    input, select { background: rgba(255,255,255,0.1); color: #fff; }
+    button { background: #1db954; color: #fff; cursor: pointer; transition: all 0.3s ease; }
+    button:hover { background: #1ed760; box-shadow: 0 0 10px rgba(29,185,84,0.7); transform: translateY(-2px); }
+    select { background: #222; color: #fff; }
+    select option { background: #222; color: #fff; }
+    .range-wrap { display:flex; align-items:center; gap:10px; }
+    .range-wrap input[type="range"] { width: 180px; accent-color: #1db954; }
+    .badge { background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 6px; font-size: 0.9em; }
+    .card {
+      margin: 30px auto; padding: 20px; background: rgba(20,20,20,0.85);
+      border-radius: 12px; max-width: 1000px; border: 1px solid rgba(255,255,255,0.1);
+      display: flex; gap: 20px; text-align: left;
+    }
+    .poster { flex: 1; }
+    .poster img { width: 100%; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.8); }
+    .info { flex: 2; }
+    h2 { color: #ffcc00; margin-top: 0; }
+    .extra { font-size: 0.95em; color: #bbb; margin-top: 10px; }
+    .info p { font-style: italic; color: #ddd; line-height: 1.5; }
+    .cast { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .actor { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 20px; }
+    .actor img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+    .providers img { height: 40px; border-radius: 6px; background: #fff; padding: 3px; margin: 5px; vertical-align: middle; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 16px; }
+    .mini-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; }
+    .mini-card img { width: 100%; border-radius: 8px; }
+    .mini-card .title { font-weight: 700; color: #fff; margin: 6px 0; }
+    .mini-card .year { color: #bbb; font-size: 0.9em; }
 
-        #dynamic-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondo.jpg');
-            background-position: center; background-size: cover;
-            z-index: -1; transition: all 1s ease;
-        }
-
-        .card {
-            background-color: var(--bg-card); 
-            padding: 40px 30px; border-radius: 28px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-            max-width: 800px; width: 90%; 
-            border: 1px solid rgba(255,255,255,0.15);
-            text-align: center; margin: 20px 0;
-            transition: background-color 0.5s ease;
-        }
-
-        /* AVATAR Y REDES SOCIALES */
-        .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px; }
-        
-        .social-container {
-            display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; align-items: center;
-        }
-
-        .social-link {
-            display: flex; align-items: center; justify-content: center; gap: 12px;
-            color: #ccc; text-decoration: none; font-weight: 500; font-size: 1rem;
-            transition: 0.3s; padding: 5px 10px; border-radius: 8px;
-        }
-        .social-link:hover { color: white; background: rgba(255,255,255,0.1); transform: translateY(-1px); }
-        .social-icon { width: 26px; height: 26px; }
-
-        /* CONTENIDO DE LA PELÍCULA (Versión PC) */
-        .movie-content { display: flex; gap: 30px; text-align: left; margin: 25px 0; display: none; animation: fadeIn 0.8s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .poster-side { flex: 1; min-width: 220px; }
-        #poster { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-
-        .info-side { flex: 2; }
-        h1#movie-title { font-size: 2rem; margin: 0; line-height: 1.2; }
-        .year-tag { color: #aaa; font-weight: normal; margin-left: 8px; font-size: 1.4rem; }
-        .original-title { font-style: italic; color: var(--primary); margin-bottom: 12px; display: block; }
-        #movie-overview { font-size: 1rem; color: #eee; line-height: 1.6; margin-bottom: 20px; }
-        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; letter-spacing: 1px; }
-
-        .cast-container { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
-        .actor-item { text-align: center; width: 55px; }
-        .actor-img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
-        .actor-name { font-size: 0.65rem; color: #ddd; display: block; margin-top: 5px; }
-
-        button { 
-            background-color: var(--primary); color: white; border: none; padding: 18px; font-size: 1.1rem; 
-            font-weight: bold; border-radius: 15px; cursor: pointer; width: 100%; max-width: 380px;
-            text-transform: uppercase; transition: 0.3s; margin-top: 10px;
-        }
-        button:hover { background-color: #5a5e9a; transform: scale(1.02); }
-
-        /* =========================================
-           NUEVO DISEÑO PARA CELULARES (Horizontal)
-        ========================================= */
-        @media (max-width: 700px) {
-            .card { padding: 25px 15px; width: 95%; } /* Menos padding para ganar espacio */
-
-            /* Forzamos que se mantenga en fila (horizontal) */
-            .movie-content { 
-                flex-direction: row; 
-                align-items: flex-start; 
-                text-align: left; 
-                gap: 15px; /* Menos espacio entre poster e info */
-            }
-
-            /* Achicamos el lado del póster */
-            .poster-side { 
-                flex: 2; /* Ocupa 2 partes del ancho */
-                min-width: auto; 
-                max-width: none;
-            }
-
-            /* El lado de la info ocupa más espacio */
-            .info-side { 
-                flex: 3; /* Ocupa 3 partes del ancho */
-            }
-
-            /* Ajuste de textos para que entren bien */
-            h1#movie-title { font-size: 1.4rem; }
-            .year-tag { font-size: 1.1rem; margin-left: 5px; }
-            .original-title { font-size: 0.9rem; margin-bottom: 8px; }
-            #movie-overview { font-size: 0.85rem; line-height: 1.4; margin-bottom: 15px; }
-            .label { margin-top: 10px; font-size: 0.7rem; }
-            
-            /* Ajuste de actores para celular */
-            .cast-container { justify-content: flex-start; gap: 8px; }
-            .actor-item { width: 45px; }
-            .actor-img { width: 45px; height: 45px; }
-            .actor-name { font-size: 0.55rem; }
-        }
-    </style>
+    @media (max-width: 700px) {
+      .card { flex-direction: column; padding: 15px; gap: 15px; }
+      .poster img { max-width: 260px; margin: 0 auto; display: block; }
+      .actor img { width: 50px; height: 50px; }
+      .range-wrap input[type="range"] { width: 140px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="header-personal">
+    <img src="icon-192.png" alt="Avatar Mundoo" class="avatar">
 
-    <div id="dynamic-bg"></div>
+    <div class="header-box">
+      <h1>Movie Randomizer</h1>
+      <p class="firma">@mundoo.cine</p>
 
-    <div class="card">
-        <img src="avatar.jpg" alt="Avatar" class="avatar">
-        
-        <div class="social-container">
-            <a href="https://www.instagram.com/mundoo.cine" target="_blank" class="social-link">
-                <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <defs>
-                        <radialGradient id="ig-grad" r="150%" cx="30%" cy="107%">
-                            <stop stop-color="#fdf497" offset="0" />
-                            <stop stop-color="#fdf497" offset="0.05" />
-                            <stop stop-color="#fd5949" offset="0.45" />
-                            <stop stop-color="#d6249f" offset="0.6" />
-                            <stop stop-color="#285AEB" offset="0.9" />
-                        </radialGradient>
-                    </defs>
-                    <path fill="url(#ig-grad)" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.5 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.9 0-184.9zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
-                </svg>
-                mundoo.cine
-            </a>
-            <a href="https://boxd.it/37NZT" target="_blank" class="social-link">
-                <svg class="social-icon" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" fill-rule="evenodd">
-                        <circle fill="#00E054" cx="7" cy="19" r="7"/>
-                        <circle fill="#FF8000" cx="19" cy="19" r="7"/>
-                        <circle fill="#40BCF4" cx="31" cy="19" r="7"/>
-                    </g>
-                </svg>
-                mundoo.cine
-            </a>
+      <!-- Búsqueda por título -->
+      <div class="controls">
+        <div class="group">
+          <input type="text" id="busqueda" placeholder="Escribí un título de película">
+          <button onclick="buscarPelicula()">Buscar película</button>
+          <button onclick="azar()">🎲 Azar (sin filtros)</button>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="controls">
+        <div class="group">
+          <!-- Género -->
+          <label for="genero" class="badge">Género</label>
+          <select id="genero">
+            <option value="">Cualquiera</option>
+            <option value="28">Acción</option>
+            <option value="12">Aventura</option>
+            <option value="16">Animación</option>
+            <option value="35">Comedia</option>
+            <option value="80">Crimen</option>
+            <option value="99">Documental</option>
+            <option value="18">Drama</option>
+            <option value="10751">Familia</option>
+            <option value="14">Fantasía</option>
+            <option value="36">Historia</option>
+            <option value="27">Terror</option>
+            <option value="10402">Música</option>
+            <option value="9648">Misterio</option>
+            <option value="10749">Romance</option>
+            <option value="878">Ciencia Ficción</option>
+            <option value="10770">Película de TV</option>
+            <option value="53">Thriller</option>
+            <option value="10752">Bélica</option>
+            <option value="37">Western</option>
+          </select>
+
+          <!-- Años -->
+          <label for="anioDesde" class="badge">Desde</label>
+          <input type="number" id="anioDesde" placeholder="1990" min="1900" max="2025">
+          <label for="anioHasta" class="badge">Hasta</label>
+          <input type="number" id="anioHasta" placeholder="2005" min="1900" max="2025">
+
+          <!-- Plataforma -->
+          <label for="proveedor" class="badge">Plataforma</label>
+          <select id="proveedor">
+            <option value="">Cualquiera</option>
+            <option value="8">Netflix</option>
+            <option value="337">Disney+</option>
+            <option value="119">Amazon Prime Video</option>
+            <option value="384">HBO Max</option>
+            <option value="350">Apple TV+</option>
+            <option value="531">Paramount+</option>
+          </select>
+
+          <!-- Actor / Director -->
+          <label for="actor" class="badge">Actor</label>
+          <input type="text" id="actor" placeholder="Nombre del actor">
+          <label for="director" class="badge">Director</label>
+          <input type="text" id="director" placeholder="Nombre del director">
         </div>
 
-        <div id="initial-message">
-            <h1 style="margin: 0; font-size: 2.2rem;">¿Qué miramos hoy?</h1>
-            <p style="color: #ccc; margin: 15px 0 30px 0; font-size: 1.1rem;">Elegí una peli al azar</p>
+        <!-- Rating (barra de volumen) -->
+        <div class="group">
+          <label for="rating" class="badge">Rating mínimo</label>
+          <div class="range-wrap">
+            <input type="range" id="rating" min="0" max="10" step="0.5" value="0" oninput="document.getElementById('ratingValue').innerText = this.value">
+            <span id="ratingValue">0</span>/10
+          </div>
         </div>
 
-        <div id="movie-display" class="movie-content">
-            <div class="poster-side"><img id="poster" src="" alt="Poster"></div>
-            <div class="info-side">
-                <h1><span id="movie-title"></span><span id="movie-year" class="year-tag"></span></h1>
-                <span id="movie-original-title" class="original-title"></span>
-                <p id="movie-overview"></p>
-                <span class="label">Dirección</span>
-                <div id="movie-director" style="font-size: 1rem; margin-top: 4px;"></div>
-                <span class="label">Reparto principal</span>
-                <div id="movie-cast" class="cast-container"></div>
-            </div>
+        <!-- Acciones -->
+        <div class="group">
+          <button onclick="azarFiltrado()">🎲 Azar (con filtros)</button>
+          <button onclick="azarFiltrado({ mostrarVarias: true, cantidad: 5 })">🎲 Azar varias (5)</button>
+          <button onclick="resetFiltros()">🧹 Borrar filtros</button>
         </div>
-        <button id="btn-sortear" onclick="sortear()">¡SORPRENDEME!</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const API_KEY = 'b9911fb46e0e11491607c279cce876a1';
-        let peliculas = [];
+  <!-- Contenedor de resultados -->
+  <div id="resultado"></div>
+<script>
+const API_KEY = "b9911fb46e0e11491607c279cce876a1"; 
+const contenedor = document.getElementById("resultado");
 
-        async function cargarPeliculas() {
-            try {
-                const r = await fetch('peliculas.json');
-                peliculas = await r.json();
-            } catch (e) { console.error("Error"); }
-        }
-        cargarPeliculas();
+// Reset de filtros
+function resetFiltros() {
+  document.getElementById("genero").value = "";
+  document.getElementById("anioDesde").value = "";
+  document.getElementById("anioHasta").value = "";
+  document.getElementById("proveedor").value = "";
+  document.getElementById("actor").value = "";
+  document.getElementById("director").value = "";
+  document.getElementById("rating").value = 0;
+  document.getElementById("ratingValue").innerText = "0";
+}
 
-        async function sortear() {
-            if (peliculas.length === 0) return;
-            const btn = document.getElementById('btn-sortear');
-            btn.disabled = true;
-            btn.innerText = "BUSCANDO...";
+// Buscar por título
+async function buscarPelicula() {
+  const query = document.getElementById("busqueda").value.trim();
+  if (!query) {
+    alert("Escribí un título para buscar");
+    return;
+  }
+  contenedor.innerHTML = "<div class='card'><div class='info'><p>Buscando…</p></div></div>";
+  try {
+    const resp = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=es-MX&query=${encodeURIComponent(query)}`);
+    const data = await resp.json();
+    if (!data.results || data.results.length === 0) {
+      contenedor.innerHTML = `<div class='card'><div class='info'><p>No encontré "${query}".</p></div></div>`;
+      return;
+    }
+    mostrarPelicula(data.results[0].id);
+  } catch (e) {
+    console.error(e);
+    contenedor.innerHTML = "<div class='card'><div class='info'><p>Error en la búsqueda.</p></div></div>";
+  }
+}
 
-            const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
-            const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(seleccionada)}&language=es-ES`;
-            const resp = await fetch(searchUrl);
-            const data = await resp.json();
-            
-            if (data.results && data.results.length > 0) {
-                const movie = data.results[0];
-                const creditsUrl = `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}&language=es-ES`;
-                const creditsResp = await fetch(creditsUrl);
-                const creditsData = await creditsResp.json();
+// Película al azar (sin filtros)
+async function azar() {
+  contenedor.innerHTML = "<div class='card'><div class='info'><p>Buscando al azar…</p></div></div>";
+  try {
+    const randomPage = Math.floor(Math.random() * 50) + 1;
+    const resp = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-MX&page=${randomPage}`);
+    const data = await resp.json();
+    if (!data.results || data.results.length === 0) {
+      contenedor.innerHTML = "<div class='card'><div class='info'><p>No encontré nada.</p></div></div>";
+      return;
+    }
+    const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
+    mostrarPelicula(randomMovie.id);
+  } catch (e) {
+    console.error(e);
+    contenedor.innerHTML = "<div class='card'><div class='info'><p>Error al buscar al azar.</p></div></div>";
+  }
+}
 
-                const bgElement = document.getElementById('dynamic-bg');
-                bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('fondo.jpg')`;
+// Azar con filtros — con variedad real para varias
+async function azarFiltrado({ mostrarVarias = false, cantidad = 5 } = {}) {
+  contenedor.innerHTML = "<div class='card'><div class='info'><p>Buscando con filtros…</p></div></div>";
 
-                document.getElementById('initial-message').style.display = 'none';
-                document.getElementById('movie-display').style.display = 'flex';
-                document.getElementById('movie-title').innerText = movie.title;
-                document.getElementById('movie-year').innerText = movie.release_date ? `(${movie.release_date.split('-')[0]})` : '';
-                document.getElementById('movie-original-title').innerText = (movie.original_title !== movie.title) ? movie.original_title : "";
-                document.getElementById('movie-overview').innerText = movie.overview || "Sinopsis no disponible.";
-                document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-                
-                const dir = creditsData.crew.find(p => p.job === 'Director');
-                document.getElementById('movie-director').innerText = dir ? dir.name : 'No disponible';
+  const genero = document.getElementById("genero").value;
+  const anioDesde = document.getElementById("anioDesde").value;
+  const anioHasta = document.getElementById("anioHasta").value;
+  const proveedor = document.getElementById("proveedor").value;
+  const actor = document.getElementById("actor").value.trim();
+  const director = document.getElementById("director").value.trim();
+  const rating = parseFloat(document.getElementById("rating").value);
 
-                const castHtml = creditsData.cast.slice(0, 4).map(a => `
-                    <div class="actor-item">
-                        <img src="${a.profile_path ? 'https://image.tmdb.org/t/p/w185' + a.profile_path : 'https://via.placeholder.com/60'}" class="actor-img">
-                        <span class="actor-name">${a.name}</span>
-                    </div>`).join('');
-                document.getElementById('movie-cast').innerHTML = castHtml;
-            }
-            btn.disabled = false;
-            btn.innerText = "¡SORPRENDEME!";
-        }
-    </script>
+  let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&include_adult=false`;
+
+  if (genero) url += `&with_genres=${genero}`;
+  if (anioDesde) url += `&primary_release_date.gte=${anioDesde}-01-01`;
+  if (anioHasta) url += `&primary_release_date.lte=${anioHasta}-12-31`;
+  if (proveedor) url += `&with_watch_providers=${proveedor}&watch_region=AR`;
+  if (!isNaN(rating) && rating > 0) url += `&vote_average.gte=${rating}`;
+
+  // Actores / Directores → IDs
+  if (actor) {
+    const actorId = await buscarPersonaId(actor);
+    if (actorId) url += `&with_cast=${actorId}`;
+  }
+  if (director) {
+    const directorId = await buscarPersonaId(director);
+    if (directorId) url += `&with_crew=${directorId}`;
+  }
+
+  try {
+    // Primero: conocer total_pages
+    const resp = await fetch(url + "&page=1");
+    const data = await resp.json();
+    if (!data.results || data.results.length === 0) {
+      contenedor.innerHTML = "<div class='card'><div class='info'><p>No encontré nada con esos filtros.</p></div></div>";
+      return;
+    }
+
+    const totalPages = Math.min(data.total_pages, 50);
+    // Elegimos una página aleatoria SIEMPRE para evitar repetir
+    const randomPage = Math.floor(Math.random() * totalPages) + 1;
+    const resp2 = await fetch(url + `&page=${randomPage}`);
+    const data2 = await resp2.json();
+    if (!data2.results || data2.results.length === 0) {
+      contenedor.innerHTML = "<div class='card'><div class='info'><p>No encontré nada en esa página.</p></div></div>";
+      return;
+    }
+
+    if (mostrarVarias) {
+      // Mezclamos la página y tomamos N distintos
+      const shuffled = data2.results
+        .map(r => ({ r, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(x => x.r);
+      const lista = shuffled.slice(0, cantidad);
+
+      contenedor.innerHTML = `<div class="grid">
+        ${lista.map(item => miniCard(item)).join("")}
+      </div>`;
+
+      lista.forEach(item => attachMiniCardClick(item.id));
+      return;
+    }
+
+    // Solo una al azar
+    const randomMovie = data2.results[Math.floor(Math.random() * data2.results.length)];
+    mostrarPelicula(randomMovie.id);
+  } catch (e) {
+    console.error(e);
+    contenedor.innerHTML = "<div class='card'><div class='info'><p>Error al buscar con filtros.</p></div></div>";
+  }
+}
+
+// Mini-card HTML
+function miniCard(item) {
+  const poster = item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : "";
+  const title = item.title || item.original_title || "Sin título";
+  const year = (item.release_date || "").slice(0,4);
+  return `
+    <div class="mini-card" data-id="${item.id}">
+      ${poster ? `<img src="${poster}" alt="${title}">` : ""}
+      <div class="title">${title}</div>
+      <div class="year">${year ? `(${year})` : ""}</div>
+      <button class="open-btn" data-id="${item.id}">Ver ficha</button>
+    </div>
+  `;
+}
+
+// Click para abrir ficha desde mini-cards
+function attachMiniCardClick(id) {
+  const btn = document.querySelector(`.open-btn[data-id="${id}"]`);
+  if (btn) btn.addEventListener("click", () => mostrarPelicula(id));
+}
+
+// ID de persona (actor/director)
+async function buscarPersonaId(nombre) {
+  try {
+    const resp = await fetch(`https://api.themoviedb.org/3/search/person?api_key=${API_KEY}&language=es-MX&query=${encodeURIComponent(nombre)}`);
+    const data = await resp.json();
+    if (data.results && data.results.length > 0) {
+      return data.results[0].id;
+    }
+  } catch (e) {
+    console.error("Error buscando persona:", e);
+  }
+  return null;
+}
+// Mostrar detalles + plataformas + mini-saga
+async function mostrarPelicula(movieId) {
+  try {
+    const detailsResp = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=es-MX`);
+    let details = await detailsResp.json();
+    if (!details.overview) {
+      const detailsEnResp = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=en-US`);
+      const detailsEn = await detailsEnResp.json();
+      if (detailsEn.overview) details.overview = detailsEn.overview;
+    }
+
+    const creditsResp = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=es-MX`);
+    const credits = await creditsResp.json();
+
+    const providersResp = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${API_KEY}`);
+    const providersData = await providersResp.json();
+    const providers = providersData.results?.AR?.flatrate || [];
+
+    const poster = details.poster_path ? `https://image.tmdb.org/t/p/w300${details.poster_path}` : "";
+    const director = credits.crew?.find(p => p.job === "Director");
+    const actores = (credits.cast || []).slice(0,4);
+    const generos = (details.genres || []).map(g => g.name).join(", ");
+
+    const tituloOriginal = details.original_title || "";
+    const tituloLocal = details.title || "";
+    const subtitulo = (tituloOriginal !== tituloLocal) 
+      ? `<span style="color:#ffcc00; font-size:1em;">(${tituloLocal})</span>` 
+      : "";
+
+    const rating = details.vote_average ? details.vote_average.toFixed(1) : "N/D";
+    const imdbLink = details.imdb_id 
+      ? `<a href="https://www.imdb.com/title/${details.imdb_id}" target="_blank" style="color:#1db954;">(IMDb)</a>` 
+      : "";
+
+    contenedor.innerHTML = `
+      <div class="card">
+        <div class="poster">${poster ? `<img src="${poster}" alt="${tituloOriginal}">` : ""}</div>
+        <div class="info">
+          <h2>${tituloOriginal} ${subtitulo} (${details.release_date?.slice(0,4) || ""})</h2>
+          <p>${details.overview || "Sin sinopsis disponible."}</p>
+          <div class="extra">
+            <strong>Géneros:</strong> ${generos || "N/D"}<br>
+            <strong>Director:</strong> ${director ? director.name : "N/D"}<br>
+            <strong>Rating:</strong> ⭐ ${rating}/10 ${imdbLink}
+          </div>
+          <div class="cast">
+            ${actores.map(a => `
+              <div class="actor">
+                ${a.profile_path ? `<img src="https://image.tmdb.org/t/p/w185${a.profile_path}" alt="${a.name}">` : ""}
+                <span>${a.name}</span>
+              </div>
+            `).join("")}
+          </div>
+          <div class="providers">
+            ${providers.length ? providers.map(p => `
+              <img src="https://image.tmdb.org/t/p/w45${p.logo_path}" alt="${p.provider_name}" title="${p.provider_name}">
+            `).join("") : "<em>No disponible en plataformas conocidas para Argentina.</em>"}
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Sagas: mostrar 3 títulos de la colección si aplica
+    if (details.belongs_to_collection?.id) {
+      const colResp = await fetch(`https://api.themoviedb.org/3/collection/${details.belongs_to_collection.id}?api_key=${API_KEY}&language=es-MX`);
+      const colData = await colResp.json();
+      const sagaParts = (colData.parts || [])
+        .sort((a,b) => (a.release_date||"").localeCompare(b.release_date||""))
+        .slice(0,3);
+
+      if (sagaParts.length) {
+        const sagaHtml = `
+          <div class="card">
+            <div class="info">
+              <h2 style="color:#1db954;">Saga: ${details.belongs_to_collection.name}</h2>
+              <div class="grid">
+                ${sagaParts.map(p => miniCard(p)).join("")}
+              </div>
+            </div>
+          </div>
+        `;
+        contenedor.innerHTML += sagaHtml;
+        sagaParts.forEach(p => attachMiniCardClick(p.id));
+      }
+    }
+  } catch (e) {
+    console.error(e);
+    contenedor.innerHTML = "<div class='card'><div class='info'><p>Error al mostrar la película.</p></div></div>";
+  }
+}
+
+// Enter para disparar búsqueda
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("busqueda");
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") buscarPelicula();
+  });
+});
+
+// Service Worker (si lo tenés)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker registrado"))
+    .catch(err => console.error("Error registrando SW:", err));
+}
+</script>
 </body>
 </html>
