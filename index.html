@@ -43,13 +43,9 @@
             transition: 0.3s; padding: 5px 10px; border-radius: 8px;
         }
         .social-link:hover { color: white; background: rgba(255,255,255,0.1); transform: translateY(-1px); }
-        
-        /* Estilo base para el tamaño de los íconos */
         .social-icon { width: 26px; height: 26px; }
-        
-        /* NOTA: Se eliminaron las reglas de color fill porque ahora los SVGs traen sus propios colores */
 
-        /* CONTENIDO DE LA PELÍCULA */
+        /* CONTENIDO DE LA PELÍCULA (Versión PC) */
         .movie-content { display: flex; gap: 30px; text-align: left; margin: 25px 0; display: none; animation: fadeIn 0.8s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -75,12 +71,44 @@
         }
         button:hover { background-color: #5a5e9a; transform: scale(1.02); }
 
+        /* =========================================
+           NUEVO DISEÑO PARA CELULARES (Horizontal)
+        ========================================= */
         @media (max-width: 700px) {
-            .card { padding: 30px 20px; width: 88%; }
-            .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
-            .poster-side { min-width: 180px; max-width: 200px; }
-            .cast-container { justify-content: center; }
-            h1#movie-title { font-size: 1.7rem; }
+            .card { padding: 25px 15px; width: 95%; } /* Menos padding para ganar espacio */
+
+            /* Forzamos que se mantenga en fila (horizontal) */
+            .movie-content { 
+                flex-direction: row; 
+                align-items: flex-start; 
+                text-align: left; 
+                gap: 15px; /* Menos espacio entre poster e info */
+            }
+
+            /* Achicamos el lado del póster */
+            .poster-side { 
+                flex: 2; /* Ocupa 2 partes del ancho */
+                min-width: auto; 
+                max-width: none;
+            }
+
+            /* El lado de la info ocupa más espacio */
+            .info-side { 
+                flex: 3; /* Ocupa 3 partes del ancho */
+            }
+
+            /* Ajuste de textos para que entren bien */
+            h1#movie-title { font-size: 1.4rem; }
+            .year-tag { font-size: 1.1rem; margin-left: 5px; }
+            .original-title { font-size: 0.9rem; margin-bottom: 8px; }
+            #movie-overview { font-size: 0.85rem; line-height: 1.4; margin-bottom: 15px; }
+            .label { margin-top: 10px; font-size: 0.7rem; }
+            
+            /* Ajuste de actores para celular */
+            .cast-container { justify-content: flex-start; gap: 8px; }
+            .actor-item { width: 45px; }
+            .actor-img { width: 45px; height: 45px; }
+            .actor-name { font-size: 0.55rem; }
         }
     </style>
 </head>
