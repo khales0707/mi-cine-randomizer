@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
-        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.6); }
+        :root { --primary: #6c70b0; --bg-card: rgba(0, 0, 0, 0.6); --accent: #ffb400; }
 
         body { 
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
@@ -37,17 +37,12 @@
         .social-icon-link:hover { transform: scale(1.15); }
         .social-icon { width: 20px; height: 20px; }
 
-        /* NUEVA SECCIÓN DE FILTROS */
-        .filters-container {
-            display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;
-        }
+        .filters-container { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
         select {
             background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.2);
             padding: 10px; border-radius: 10px; outline: none; cursor: pointer; font-size: 0.9rem;
         }
-        select option { background: #222; }
 
-        /* CONTENIDO DE LA PELÍCULA */
         .movie-content { display: flex; gap: 35px; text-align: left; margin: 30px 0; display: none; animation: fadeIn 0.8s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -57,6 +52,10 @@
         .info-side { flex: 2; }
         h1#movie-title { font-size: 2.2rem; margin: 0; line-height: 1.1; font-weight: 800; }
         .year-tag { color: #888; font-weight: 300; margin-left: 10px; font-size: 1.5rem; }
+        
+        /* ESTILO PARA EL PUNTAJE */
+        .rating-tag { color: var(--accent); font-weight: bold; font-size: 1.2rem; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+        
         .original-title { font-style: italic; color: var(--primary); margin-bottom: 15px; display: block; font-size: 1.1rem; }
         #movie-overview { font-size: 1.05rem; color: #eee; line-height: 1.6; margin-bottom: 25px; }
         .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; display: block; margin-top: 20px; letter-spacing: 1.5px; }
@@ -125,10 +124,10 @@
                 <option value="28">Acción</option>
                 <option value="35">Comedia</option>
                 <option value="27">Terror</option>
+                <option value="53">Thriller</option>
                 <option value="878">Ciencia Ficción</option>
                 <option value="18">Drama</option>
                 <option value="10749">Romance</option>
-                <option value="53">Suspense</option>
             </select>
             <select id="filter-decade">
                 <option value="">Cualquier Año</option>
@@ -145,6 +144,7 @@
             <div class="poster-side"><img id="poster" src="" alt="Poster"></div>
             <div class="info-side">
                 <h1><span id="movie-title"></span><span id="movie-year" class="year-tag"></span></h1>
+                <div id="movie-rating" class="rating-tag"></div>
                 <span id="movie-original-title" class="original-title"></span>
                 <p id="movie-overview"></p>
                 <span class="label">Dirección</span>
@@ -179,9 +179,9 @@
             let movieData;
 
             try {
-                // Si hay filtros, buscamos en TMDB globalmente
+                // Buscamos con language=es-MX para Latino
                 if (genre || decade) {
-                    let discoverUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-ES&sort_by=vote_count.desc&include_adult=false&page=${Math.floor(Math.random() * 5) + 1}`;
+                    let discoverUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&include_adult=false&page=${Math.floor(Math.random() * 5) + 1}`;
                     if (genre) discoverUrl += `&with_genres=${genre}`;
                     if (decade) discoverUrl += `&primary_release_date.gte=${decade}-01-01&primary_release_date.lte=${parseInt(decade)+9}-12-31`;
                     
@@ -189,16 +189,15 @@
                     const data = await resp.json();
                     movieData = data.results[Math.floor(Math.random() * data.results.length)];
                 } else {
-                    // Si no hay filtros, usamos tu peliculas.json
                     const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
-                    const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(seleccionada)}&language=es-ES`;
+                    const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(seleccionada)}&language=es-MX`;
                     const resp = await fetch(searchUrl);
                     const data = await resp.json();
                     movieData = data.results[0];
                 }
 
                 if (movieData) {
-                    const creditsUrl = `https://api.themoviedb.org/3/movie/${movieData.id}/credits?api_key=${API_KEY}&language=es-ES`;
+                    const creditsUrl = `https://api.themoviedb.org/3/movie/${movieData.id}/credits?api_key=${API_KEY}&language=es-MX`;
                     const creditsResp = await fetch(creditsUrl);
                     const creditsData = await creditsResp.json();
 
@@ -209,6 +208,11 @@
                     document.getElementById('movie-display').style.display = 'flex';
                     document.getElementById('movie-title').innerText = movieData.title;
                     document.getElementById('movie-year').innerText = movieData.release_date ? `(${movieData.release_date.split('-')[0]})` : '';
+                    
+                    // Mostrar Puntaje
+                    const rating = movieData.vote_average.toFixed(1);
+                    document.getElementById('movie-rating').innerHTML = `★ ${rating}`;
+                    
                     document.getElementById('movie-original-title').innerText = (movieData.original_title !== movieData.title) ? movieData.original_title : "";
                     document.getElementById('movie-overview').innerText = movieData.overview || "Sinopsis no disponible.";
                     document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${movieData.poster_path}`;
