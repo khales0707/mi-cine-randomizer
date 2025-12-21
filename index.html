@@ -53,8 +53,7 @@
         h1#movie-title { font-size: 2.2rem; margin: 0; line-height: 1.1; font-weight: 800; }
         .year-tag { color: #888; font-weight: 300; margin-left: 10px; font-size: 1.5rem; }
         
-        /* ESTILO PARA EL PUNTAJE */
-        .rating-tag { color: var(--accent); font-weight: bold; font-size: 1.2rem; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+        .rating-tag { color: var(--accent); font-weight: bold; font-size: 1.1rem; margin: 8px 0; display: flex; align-items: center; gap: 5px; }
         
         .original-title { font-style: italic; color: var(--primary); margin-bottom: 15px; display: block; font-size: 1.1rem; }
         #movie-overview { font-size: 1.05rem; color: #eee; line-height: 1.6; margin-bottom: 25px; }
@@ -77,6 +76,7 @@
             .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 30px; }
             .poster-side { width: 100%; max-width: 240px; min-width: auto; }
             .info-side { text-align: left; width: 100%; }
+            h1#movie-title { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -179,9 +179,9 @@
             let movieData;
 
             try {
-                // Buscamos con language=es-MX para Latino
+                // Buscamos con language=es-MX e include_image_language=es para posters latinos
                 if (genre || decade) {
-                    let discoverUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&include_adult=false&page=${Math.floor(Math.random() * 5) + 1}`;
+                    let discoverUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&include_adult=false&include_image_language=es,en&page=${Math.floor(Math.random() * 5) + 1}`;
                     if (genre) discoverUrl += `&with_genres=${genre}`;
                     if (decade) discoverUrl += `&primary_release_date.gte=${decade}-01-01&primary_release_date.lte=${parseInt(decade)+9}-12-31`;
                     
@@ -190,7 +190,7 @@
                     movieData = data.results[Math.floor(Math.random() * data.results.length)];
                 } else {
                     const seleccionada = peliculas[Math.floor(Math.random() * peliculas.length)];
-                    const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(seleccionada)}&language=es-MX`;
+                    const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(seleccionada)}&language=es-MX&include_image_language=es,en`;
                     const resp = await fetch(searchUrl);
                     const data = await resp.json();
                     movieData = data.results[0];
@@ -209,7 +209,6 @@
                     document.getElementById('movie-title').innerText = movieData.title;
                     document.getElementById('movie-year').innerText = movieData.release_date ? `(${movieData.release_date.split('-')[0]})` : '';
                     
-                    // Mostrar Puntaje
                     const rating = movieData.vote_average.toFixed(1);
                     document.getElementById('movie-rating').innerHTML = `★ ${rating}`;
                     
