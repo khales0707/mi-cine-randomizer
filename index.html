@@ -15,9 +15,9 @@
 
         #dynamic-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('fondo.jpg');
-            background-position: center; background-size: cover;
-            background-attachment: fixed; z-index: -1; transition: background 0.8s ease;
+            /* NUEVO FONDO: Degradado radial moderno (Estilo Bokeh/Abstracto) sin imagen */
+            background: radial-gradient(circle at 50% 30%, #232536, #000000);
+            z-index: -1; transition: background 0.8s ease;
         }
 
         .card {
@@ -179,7 +179,7 @@
             let movieData;
 
             try {
-                // Buscamos con language=es-MX e include_image_language=es para posters latinos
+                // Se prioriza language=es-MX e include_image_language=es,en para posters
                 if (genre || decade) {
                     let discoverUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&include_adult=false&include_image_language=es,en&page=${Math.floor(Math.random() * 5) + 1}`;
                     if (genre) discoverUrl += `&with_genres=${genre}`;
@@ -201,8 +201,9 @@
                     const creditsResp = await fetch(creditsUrl);
                     const creditsData = await creditsResp.json();
 
+                    // Cambiamos a un degradado más oscuro al mostrar la película (sin usar fondo.jpg)
                     const bgElement = document.getElementById('dynamic-bg');
-                    bgElement.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('fondo.jpg')`;
+                    bgElement.style.background = `radial-gradient(circle at 50% 30%, #11121a, #000000)`;
 
                     document.getElementById('initial-message').style.display = 'none';
                     document.getElementById('movie-display').style.display = 'flex';
