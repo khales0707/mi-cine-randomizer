@@ -50,13 +50,17 @@
         #poster { width: 100%; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.1); }
 
         .info-side { flex: 2; }
-        h1#movie-title { font-size: 2.2rem; margin: 0; line-height: 1.1; font-weight: 800; }
-        .year-tag { color: #888; font-weight: 300; margin-left: 10px; font-size: 1.5rem; }
         
-        .rating-tag { color: var(--accent); font-weight: bold; font-size: 1.1rem; margin: 8px 0; display: flex; align-items: center; gap: 5px; }
+        /* AJUSTE DE TÍTULO */
+        h1#movie-title-container { font-size: 1.8rem; margin: 0; line-height: 1.2; font-weight: 800; }
+        .year-tag { color: #888; font-weight: 300; margin-left: 8px; font-size: 1.3rem; }
         
-        .original-title { font-style: italic; color: var(--primary); margin-bottom: 15px; display: block; font-size: 1.1rem; }
-        #movie-overview { font-size: 1.05rem; color: #eee; line-height: 1.6; margin-bottom: 25px; }
+        /* TÍTULO ORIGINAL DEBAJO */
+        .original-title { font-style: italic; color: var(--primary); margin: 4px 0 10px 0; display: block; font-size: 1.1rem; opacity: 0.9; }
+        
+        .rating-tag { color: var(--accent); font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        
+        #movie-overview { font-size: 1rem; color: #eee; line-height: 1.6; margin-bottom: 25px; }
         .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; display: block; margin-top: 20px; letter-spacing: 1.5px; }
 
         .cast-container { display: flex; gap: 15px; margin-top: 12px; flex-wrap: wrap; }
@@ -73,10 +77,10 @@
 
         @media (max-width: 700px) {
             .card { padding: 30px 20px; width: 88%; margin: 20px auto; }
-            .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 30px; }
-            .poster-side { width: 100%; max-width: 240px; min-width: auto; }
+            .movie-content { flex-direction: column; align-items: center; text-align: center; gap: 25px; }
+            .poster-side { width: 100%; max-width: 220px; min-width: auto; }
             .info-side { text-align: left; width: 100%; }
-            h1#movie-title { font-size: 1.8rem; }
+            h1#movie-title-container { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -122,7 +126,7 @@
             <select id="filter-genre">
                 <option value="">Cualquier Género</option>
                 <option value="28">Acción</option>
-                <option value="35">Comedia</option>
+                <option value="16">Animadas</option> <option value="35">Comedia</option>
                 <option value="27">Terror</option>
                 <option value="53">Thriller</option>
                 <option value="878">Ciencia Ficción</option>
@@ -143,12 +147,18 @@
         <div id="movie-display" class="movie-content">
             <div class="poster-side"><img id="poster" src="" alt="Poster"></div>
             <div class="info-side">
-                <h1><span id="movie-title"></span><span id="movie-year" class="year-tag"></span></h1>
-                <div id="movie-rating" class="rating-tag"></div>
+                <h1 id="movie-title-container">
+                    <span id="movie-title"></span>
+                    <span id="movie-year" class="year-tag"></span>
+                </h1>
                 <span id="movie-original-title" class="original-title"></span>
+                <div id="movie-rating" class="rating-tag"></div>
+                
                 <p id="movie-overview"></p>
+                
                 <span class="label">Dirección</span>
                 <div id="movie-director" style="font-size: 1.1rem; margin-top: 5px;"></div>
+                
                 <span class="label">Reparto principal</span>
                 <div id="movie-cast" class="cast-container"></div>
             </div>
@@ -179,7 +189,6 @@
             let movieData;
 
             try {
-                // Buscamos con language=es-MX e include_image_language=es para posters latinos
                 if (genre || decade) {
                     let discoverUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&include_adult=false&include_image_language=es,en&page=${Math.floor(Math.random() * 5) + 1}`;
                     if (genre) discoverUrl += `&with_genres=${genre}`;
@@ -206,13 +215,23 @@
 
                     document.getElementById('initial-message').style.display = 'none';
                     document.getElementById('movie-display').style.display = 'flex';
+                    
+                    // Llenar datos
                     document.getElementById('movie-title').innerText = movieData.title;
                     document.getElementById('movie-year').innerText = movieData.release_date ? `(${movieData.release_date.split('-')[0]})` : '';
                     
+                    // Título original (solo si es distinto al latino)
+                    const oTitle = document.getElementById('movie-original-title');
+                    if (movieData.original_title && movieData.original_title !== movieData.title) {
+                        oTitle.innerText = movieData.original_title;
+                        oTitle.style.display = 'block';
+                    } else {
+                        oTitle.style.display = 'none';
+                    }
+
                     const rating = movieData.vote_average.toFixed(1);
                     document.getElementById('movie-rating').innerHTML = `★ ${rating}`;
                     
-                    document.getElementById('movie-original-title').innerText = (movieData.original_title !== movieData.title) ? movieData.original_title : "";
                     document.getElementById('movie-overview').innerText = movieData.overview || "Sinopsis no disponible.";
                     document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${movieData.poster_path}`;
                     
