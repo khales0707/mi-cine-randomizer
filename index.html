@@ -33,6 +33,7 @@
         .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 10px; }
         .username { font-size: 1.3rem; font-weight: bold; margin: 0; opacity: 0.9; }
         
+        /* REDES SOCIALES ORIGINALES */
         .social-container { display: flex; gap: 22px; margin: 15px 0 35px 0; justify-content: center; align-items: center; }
         .social-icon-link { transition: 0.3s; }
         .social-icon-link:hover { transform: translateY(-3px) scale(1.1); }
@@ -51,8 +52,6 @@
 
         .poster-side { flex: 1; min-width: 250px; }
         #poster { width: 100%; border-radius: 18px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
-        .loading-pulse { animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         .info-side { flex: 1.5; }
         h1#movie-title-container { font-size: 1.9rem; margin: 0; line-height: 1.1; font-weight: 800; }
@@ -71,7 +70,7 @@
         }
         .btn-action:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
         .btn-trailer:hover { background: #ff0000; border-color: #ff0000; }
-        .btn-platforms:hover { background: #00E054; color: black; border-color: #00E054; }
+        .btn-platforms:hover { background: #f4c20d; color: black; border-color: #f4c20d; } /* Color JustWatch */
 
         .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; letter-spacing: 2px; }
         .cast-container { display: flex; gap: 15px; margin-top: 12px; flex-wrap: wrap; }
@@ -193,7 +192,6 @@
             
             btn.disabled = true;
             btn.innerText = "BUSCANDO...";
-            if(poster.src) poster.classList.add('loading-pulse');
 
             try {
                 let movieData;
@@ -233,7 +231,6 @@
                     document.getElementById('movie-rating').innerHTML = `★ ${movieData.vote_average.toFixed(1)}`;
                     document.getElementById('movie-overview').innerText = movieData.overview || "Sinopsis no disponible.";
                     poster.src = `https://image.tmdb.org/t/p/w500${movieData.poster_path}`;
-                    poster.classList.remove('loading-pulse');
 
                     const dir = credits.crew.find(p => p.job === 'Director');
                     document.getElementById('movie-director').innerText = dir ? dir.name : 'No disponible';
@@ -252,9 +249,9 @@
                         btnT.style.display = 'inline-flex';
                     } else { btnT.style.display = 'none'; }
 
-                    // Lógica Plataformas (Google Search de Disponibilidad)
+                    // Lógica JustWatch (Buscador)
                     const btnP = document.getElementById('btn-platforms');
-                    btnP.href = `https://www.google.com/search?q=donde+ver+${encodeURIComponent(title)}+pelicula`;
+                    btnP.href = `https://www.justwatch.com/ar/buscar?q=${encodeURIComponent(title)}`;
                 }
             } catch (e) { console.error(e); }
 
