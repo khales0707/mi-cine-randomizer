@@ -25,15 +25,14 @@
             padding: 40px; border-radius: 32px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             max-width: 850px; width: 92%; 
-            border: 1px solid rgba(255,255,255,0.1); /* Efecto cristal */
+            border: 1px solid rgba(255,255,255,0.1);
             text-align: center; margin: 40px auto;
-            backdrop-filter: blur(15px); /* Desenfoque más potente */
+            backdrop-filter: blur(15px);
         }
 
         .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 10px; }
         .username { font-size: 1.3rem; font-weight: bold; margin: 0; opacity: 0.9; }
         
-        /* REDES SOCIALES (Restauradas al 100%) */
         .social-container { display: flex; gap: 22px; margin: 15px 0 35px 0; justify-content: center; align-items: center; }
         .social-icon-link { transition: 0.3s; }
         .social-icon-link:hover { transform: translateY(-3px) scale(1.1); }
@@ -44,23 +43,21 @@
         select {
             background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255,255,255,0.15);
             padding: 12px 18px; border-radius: 14px; outline: none; cursor: pointer; font-size: 0.9rem;
-            transition: 0.3s;
         }
-        select:hover { background: rgba(255, 255, 255, 0.15); }
         select option { background-color: #1a1a1a; color: white; }
 
         .movie-content { display: flex; gap: 40px; text-align: left; margin: 30px 0; display: none; animation: slideUp 0.6s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .poster-side { flex: 1; min-width: 250px; position: relative; }
-        #poster { width: 100%; border-radius: 18px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); transition: 0.5s; }
+        .poster-side { flex: 1; min-width: 250px; }
+        #poster { width: 100%; border-radius: 18px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
         .loading-pulse { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         .info-side { flex: 1.5; }
         h1#movie-title-container { font-size: 1.9rem; margin: 0; line-height: 1.1; font-weight: 800; }
         .year-tag { color: #999; font-weight: 300; margin-left: 10px; font-size: 1.4rem; }
-        .original-title { font-style: italic; color: var(--primary); margin: 6px 0 14px 0; display: block; font-size: 1.1rem; opacity: 0.8; }
+        .original-title { font-style: italic; color: var(--primary); margin: 6px 0 14px 0; display: block; font-size: 1.1rem; }
         .rating-tag { color: var(--accent); font-weight: bold; font-size: 1.2rem; margin-bottom: 18px; display: flex; align-items: center; gap: 6px; }
         
         #movie-overview { font-size: 1rem; color: #ddd; line-height: 1.6; margin-bottom: 25px; }
@@ -74,8 +71,9 @@
         }
         .btn-action:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
         .btn-trailer:hover { background: #ff0000; border-color: #ff0000; }
+        .btn-platforms:hover { background: #00E054; color: black; border-color: #00E054; }
 
-        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; letter-spacing: 2px; opacity: 0.7; }
+        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; letter-spacing: 2px; }
         .cast-container { display: flex; gap: 15px; margin-top: 12px; flex-wrap: wrap; }
         .actor-item { text-align: center; width: 60px; }
         .actor-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
@@ -85,9 +83,8 @@
             background-color: var(--primary); color: white; border: none; padding: 22px; font-size: 1.2rem; 
             font-weight: bold; border-radius: 20px; cursor: pointer; width: 100%; max-width: 420px;
             text-transform: uppercase; transition: 0.4s; margin-top: 15px; letter-spacing: 2px;
-            box-shadow: 0 10px 25px rgba(108, 112, 176, 0.4);
         }
-        button#btn-sortear:hover { background-color: #7b7fc2; transform: translateY(-3px); box-shadow: 0 15px 35px rgba(108, 112, 176, 0.6); }
+        button#btn-sortear:hover { background-color: #7b7fc2; transform: translateY(-3px); }
 
         @media (max-width: 750px) {
             .card { padding: 30px 20px; }
@@ -164,7 +161,7 @@
 
                 <div class="actions-row">
                     <a id="btn-trailer" href="#" target="_blank" class="btn-action btn-trailer" style="display: none;">▶ Ver Tráiler</a>
-                    <div onclick="copyMovie()" class="btn-action">📋 Copiar Título</div>
+                    <a id="btn-platforms" href="#" target="_blank" class="btn-action btn-platforms">📺 ¿Dónde verla?</a>
                 </div>
                 
                 <span class="label">Dirección</span>
@@ -225,7 +222,8 @@
                     document.getElementById('initial-message').style.display = 'none';
                     document.getElementById('movie-display').style.display = 'flex';
                     
-                    document.getElementById('movie-title').innerText = movieData.title;
+                    const title = movieData.title;
+                    document.getElementById('movie-title').innerText = title;
                     const year = movieData.release_date ? movieData.release_date.split('-')[0] : '';
                     document.getElementById('movie-year').innerText = `(${year})`;
                     
@@ -246,24 +244,22 @@
                             <span class="actor-name">${a.name}</span>
                         </div>`).join('');
 
+                    // Lógica Tráiler
                     const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
                     const btnT = document.getElementById('btn-trailer');
                     if (trailer) {
                         btnT.href = `https://www.youtube.com/watch?v=${trailer.key}`;
                         btnT.style.display = 'inline-flex';
                     } else { btnT.style.display = 'none'; }
+
+                    // Lógica Plataformas (Google Search de Disponibilidad)
+                    const btnP = document.getElementById('btn-platforms');
+                    btnP.href = `https://www.google.com/search?q=donde+ver+${encodeURIComponent(title)}+pelicula`;
                 }
             } catch (e) { console.error(e); }
 
             btn.disabled = false;
             btn.innerText = "¡SORPRENDEME!";
-        }
-
-        function copyMovie() {
-            const title = document.getElementById('movie-title').innerText;
-            const year = document.getElementById('movie-year').innerText;
-            navigator.clipboard.writeText(`${title} ${year}`);
-            alert('¡Título copiado al portapapeles!');
         }
     </script>
 </body>
