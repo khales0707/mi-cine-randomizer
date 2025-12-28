@@ -5,258 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Randomizer - @mundoo.cine</title>
     <style>
-        :root { --primary: #6c70b0; --bg-card: rgba(15, 15, 15, 0.75); --accent: #ffb400; }
+        :root { --primary: #6c70b0; --accent: #ffb400; --bg: #0a0a0a; }
 
         body { 
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-            margin: 0; display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; color: white; background: #000; overflow-x: hidden;
+            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; 
+            margin: 0; background-color: var(--bg); color: white;
+            display: flex; justify-content: center; min-height: 100vh;
         }
 
-        #dynamic-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondo.jpg');
-            background-position: center; background-size: cover;
-            z-index: -1; transition: background 1s ease;
+        /* BANNER SUPERIOR CON DESVANECIDO */
+        #movie-banner {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60vh;
+            background-size: cover; background-position: center top;
+            z-index: -1; transition: 1s ease-in-out;
+        }
+        #movie-banner::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,1) 95%);
         }
 
-        .card {
-            background-color: var(--bg-card); 
-            padding: 40px; border-radius: 32px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            max-width: 850px; width: 92%; 
-            border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; margin: 40px auto;
-            backdrop-filter: blur(15px);
-        }
+        .container { width: 95%; max-width: 900px; padding: 40px 0; z-index: 10; }
 
-        .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 10px; }
-        .username { font-size: 1.3rem; font-weight: bold; margin: 0; opacity: 0.9; }
+        /* CABECERA */
+        .header { text-align: center; margin-bottom: 40px; }
+        .avatar { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--primary); margin-bottom: 10px; }
+        .username { font-weight: bold; font-size: 1.1rem; letter-spacing: 1px; margin: 0; }
         
-        /* REDES SOCIALES ORIGINALES */
-        .social-container { display: flex; gap: 22px; margin: 15px 0 35px 0; justify-content: center; align-items: center; }
-        .social-icon-link { transition: 0.3s; }
-        .social-icon-link:hover { transform: translateY(-3px) scale(1.1); }
-        .social-icon { width: 22px; height: 22px; }
+        .social-container { display: flex; gap: 20px; justify-content: center; margin: 15px 0; }
+        .social-icon { width: 20px; height: 20px; fill: white; transition: 0.3s; }
+        .social-icon:hover { transform: scale(1.2); }
 
-        .filters-container { display: flex; gap: 12px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
-        
+        /* FILTROS */
+        .filters { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; }
         select {
-            background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255,255,255,0.15);
-            padding: 12px 18px; border-radius: 14px; outline: none; cursor: pointer; font-size: 0.9rem;
+            background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 15px; border-radius: 8px; cursor: pointer; backdrop-filter: blur(5px);
         }
         select option { background-color: #1a1a1a; color: white; }
 
-        .movie-content { display: flex; gap: 40px; text-align: left; margin: 30px 0; display: none; animation: slideUp 0.6s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .poster-side { flex: 1; min-width: 250px; }
-        #poster { width: 100%; border-radius: 18px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
-
-        .info-side { flex: 1.5; }
-        h1#movie-title-container { font-size: 1.9rem; margin: 0; line-height: 1.1; font-weight: 800; }
-        .year-tag { color: #999; font-weight: 300; margin-left: 10px; font-size: 1.4rem; }
-        .original-title { font-style: italic; color: var(--primary); margin: 6px 0 14px 0; display: block; font-size: 1.1rem; }
-        .rating-tag { color: var(--accent); font-weight: bold; font-size: 1.2rem; margin-bottom: 18px; display: flex; align-items: center; gap: 6px; }
-        
-        #movie-overview { font-size: 1rem; color: #ddd; line-height: 1.6; margin-bottom: 25px; }
-        
-        .actions-row { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-        .btn-action {
-            display: inline-flex; align-items: center; background: rgba(255,255,255,0.05);
-            color: white; padding: 10px 18px; border-radius: 12px; text-decoration: none;
-            font-size: 0.85rem; font-weight: bold; border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s; gap: 8px; cursor: pointer;
+        /* CONTENIDO DE PELÍCULA */
+        .movie-card {
+            display: none; grid-template-columns: 300px 1fr; gap: 40px;
+            background: rgba(255,255,255,0.03); padding: 30px; border-radius: 20px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+            animation: fadeIn 0.8s ease;
         }
-        .btn-action:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
-        .btn-trailer:hover { background: #ff0000; border-color: #ff0000; }
-        .btn-platforms:hover { background: #f4c20d; color: black; border-color: #f4c20d; } /* Color JustWatch */
 
-        .label { color: var(--primary); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-top: 15px; letter-spacing: 2px; }
-        .cast-container { display: flex; gap: 15px; margin-top: 12px; flex-wrap: wrap; }
-        .actor-item { text-align: center; width: 60px; }
-        .actor-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
-        .actor-name { font-size: 0.65rem; color: #aaa; display: block; margin-top: 6px; line-height: 1.2; }
+        .poster-side img { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        button#btn-sortear { 
-            background-color: var(--primary); color: white; border: none; padding: 22px; font-size: 1.2rem; 
-            font-weight: bold; border-radius: 20px; cursor: pointer; width: 100%; max-width: 420px;
-            text-transform: uppercase; transition: 0.4s; margin-top: 15px; letter-spacing: 2px;
+        .info-side { display: flex; flex-direction: column; max-height: 450px; } /* Altura similar al poster */
+        .title-area h1 { margin: 0; font-size: 2.2rem; line-height: 1.1; }
+        .meta { margin: 10px 0; color: #aaa; font-size: 0.9rem; }
+        .rating { color: var(--accent); font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; }
+
+        /* SINOPSIS CON SCROLL */
+        .synopsis-container { 
+            overflow-y: auto; padding-right: 15px; margin-bottom: 20px; 
+            font-size: 1rem; line-height: 1.6; color: #ddd; flex-grow: 1;
         }
-        button#btn-sortear:hover { background-color: #7b7fc2; transform: translateY(-3px); }
+        .synopsis-container::-webkit-scrollbar { width: 4px; }
+        .synopsis-container::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
-        @media (max-width: 750px) {
-            .card { padding: 30px 20px; }
-            .movie-content { flex-direction: column; align-items: center; text-align: center; }
-            .info-side { text-align: left; }
-            .actions-row { justify-content: center; }
+        .actions { display: flex; gap: 10px; margin-top: auto; }
+        .btn-small {
+            padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;
+            font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.2); color: white; transition: 0.3s;
+        }
+        .btn-small:hover { background: white; color: black; }
+
+        /* BOTÓN PRINCIPAL */
+        .btn-main {
+            display: block; width: 100%; max-width: 300px; margin: 30px auto;
+            padding: 18px; border-radius: 12px; border: none; background: var(--primary);
+            color: white; font-weight: bold; font-size: 1rem; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
+        }
+        .btn-main:hover { background: #7b7fc2; transform: translateY(-3px); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; } }
+
+        @media (max-width: 700px) {
+            .movie-card { grid-template-columns: 1fr; text-align: center; }
+            .info-side { max-height: none; }
+            .actions { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <div id="dynamic-bg"></div>
+    <div id="movie-banner"></div>
 
-    <div class="card">
-        <img src="avatar.jpg" alt="Avatar" class="avatar">
-        <p class="username">mundoo.cine</p>
-        
-        <div class="social-container">
-            <a href="https://www.instagram.com/mundoo.cine" target="_blank" class="social-icon-link">
-                <svg class="social-icon" viewBox="0 0 24 24">
-                    <defs><radialGradient id="ig-grad" r="150%" cx="30%" cy="107%"><stop stop-color="#fdf497" offset="0"/><stop stop-color="#fd5949" offset="0.45"/><stop stop-color="#d6249f" offset="0.6"/><stop stop-color="#285AEB" offset="0.9"/></radialGradient></defs>
-                    <path fill="url(#ig-grad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.073-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-            </a>
-            <a href="https://boxd.it/37NZT" target="_blank" class="social-icon-link">
-                <svg class="social-icon" viewBox="0 0 38 38"><g fill="none" fill-rule="evenodd"><circle fill="#00E054" cx="7" cy="19" r="7"/><circle fill="#FF8000" cx="19" cy="19" r="7"/><circle fill="#40BCF4" cx="31" cy="19" r="7"/></g></svg>
-            </a>
-            <a href="https://x.com/soy_Khales" target="_blank" class="social-icon-link">
-                <svg class="social-icon" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
+    <div class="container">
+        <div class="header">
+            <img src="avatar.jpg" class="avatar">
+            <p class="username">mundoo.cine</p>
+            <div class="social-container">
+                <a href="https://instagram.com/mundoo.cine" target="_blank"><svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.073-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                <a href="https://boxd.it/37NZT" target="_blank"><svg class="social-icon" viewBox="0 0 38 38"><circle fill="#00E054" cx="7" cy="19" r="7"/><circle fill="#FF8000" cx="19" cy="19" r="7"/><circle fill="#40BCF4" cx="31" cy="19" r="7"/></svg></a>
+            </div>
+            <h2 style="font-size: 2.5rem; margin-top: 10px;">¿Qué miramos hoy?</h2>
         </div>
 
-        <div id="initial-message">
-            <h1 style="margin: 0; font-size: 2.8rem; letter-spacing: -1px;">¿Qué miramos hoy?</h1>
-            <p style="color: #aaa; margin: 15px 0 30px 0; font-size: 1.1rem;">Elegí un filtro y encontrá tu próxima favorita</p>
-        </div>
-
-        <div class="filters-container">
+        <div class="filters">
             <select id="filter-genre">
-                <option value="">Todos los Géneros</option>
-                <option value="28">Acción</option>
-                <option value="16">Animadas</option>
-                <option value="35">Comedia</option>
-                <option value="27">Terror</option>
-                <option value="53">Thriller</option>
-                <option value="878">Ciencia Ficción</option>
-                <option value="18">Drama</option>
-                <option value="10749">Romance</option>
+                <option value="">Cualquier Género</option>
+                <option value="28">Acción</option><option value="16">Animadas</option><option value="35">Comedia</option>
+                <option value="27">Terror</option><option value="53">Thriller</option><option value="878">Ciencia Ficción</option>
             </select>
             <select id="filter-decade">
                 <option value="">Cualquier Año</option>
-                <option value="2020">2020s</option>
-                <option value="2010">2010s</option>
-                <option value="2000">2000s</option>
-                <option value="1990">1990s</option>
-                <option value="1980">1980s</option>
-                <option value="1970">Clásicos</option>
+                <option value="2020">2020s</option><option value="2010">2010s</option><option value="2000">2000s</option>
             </select>
         </div>
 
-        <div id="movie-display" class="movie-content">
+        <div id="movie-card" class="movie-card">
             <div class="poster-side">
                 <img id="poster" src="" alt="Poster">
             </div>
             <div class="info-side">
-                <h1 id="movie-title-container">
-                    <span id="movie-title"></span>
-                    <span id="movie-year" class="year-tag"></span>
-                </h1>
-                <span id="movie-original-title" class="original-title"></span>
-                <div id="movie-rating" class="rating-tag"></div>
-                
-                <p id="movie-overview"></p>
-
-                <div class="actions-row">
-                    <a id="btn-trailer" href="#" target="_blank" class="btn-action btn-trailer" style="display: none;">▶ Ver Tráiler</a>
-                    <a id="btn-platforms" href="#" target="_blank" class="btn-action btn-platforms">📺 ¿Dónde verla?</a>
+                <div class="title-area">
+                    <h1 id="title"></h1>
+                    <div class="meta">
+                        <span id="year"></span> • <span id="director"></span>
+                    </div>
                 </div>
+                <div id="rating" class="rating"></div>
                 
-                <span class="label">Dirección</span>
-                <div id="movie-director" style="font-size: 1.1rem; margin-top: 5px; font-weight: 500;"></div>
-                <span class="label">Reparto principal</span>
-                <div id="movie-cast" class="cast-container"></div>
+                <div class="synopsis-container" id="overview"></div>
+
+                <div class="actions">
+                    <a id="btn-trailer" href="#" target="_blank" class="btn-small">TRAILER</a>
+                    <a id="btn-jw" href="#" target="_blank" class="btn-small">DONDE VER</a>
+                </div>
             </div>
         </div>
-        <button id="btn-sortear" onclick="sortear()">¡SORPRENDEME!</button>
+
+        <button class="btn-main" id="btn-sortear" onclick="sortear()">¡Sorprendeme!</button>
     </div>
 
     <script>
         const API_KEY = 'b9911fb46e0e11491607c279cce876a1';
-        let peliculas = [];
-
-        async function cargarPeliculas() {
-            try {
-                const r = await fetch('peliculas.json');
-                peliculas = await r.json();
-            } catch (e) { console.error("Error al cargar peliculas.json"); }
-        }
-        cargarPeliculas();
-
+        
         async function sortear() {
             const btn = document.getElementById('btn-sortear');
-            const poster = document.getElementById('poster');
             const genre = document.getElementById('filter-genre').value;
             const decade = document.getElementById('filter-decade').value;
             
-            btn.disabled = true;
             btn.innerText = "BUSCANDO...";
+            btn.disabled = true;
 
             try {
-                let movieData;
-                if (genre || decade) {
-                    let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&include_adult=false&page=${Math.floor(Math.random() * 4) + 1}`;
-                    if (genre) url += `&with_genres=${genre}`;
-                    if (decade) url += `&primary_release_date.gte=${decade}-01-01&primary_release_date.lte=${parseInt(decade)+9}-12-31`;
-                    const r = await fetch(url);
-                    const d = await r.json();
-                    movieData = d.results[Math.floor(Math.random() * d.results.length)];
-                } else {
-                    const sel = peliculas[Math.floor(Math.random() * peliculas.length)];
-                    const r = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(sel)}&language=es-MX`);
-                    const d = await r.json();
-                    movieData = d.results[0];
-                }
+                let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&include_adult=false&page=${Math.floor(Math.random() * 5) + 1}`;
+                if (genre) url += `&with_genres=${genre}`;
+                if (decade) url += `&primary_release_date.gte=${decade}-01-01&primary_release_date.lte=${parseInt(decade)+9}-12-31`;
 
-                if (movieData) {
-                    const [cR, vR] = await Promise.all([
-                        fetch(`https://api.themoviedb.org/3/movie/${movieData.id}/credits?api_key=${API_KEY}&language=es-MX`),
-                        fetch(`https://api.themoviedb.org/3/movie/${movieData.id}/videos?api_key=${API_KEY}`)
+                const resp = await fetch(url);
+                const data = await resp.json();
+                const movie = data.results[Math.floor(Math.random() * data.results.length)];
+
+                if (movie) {
+                    const [detailResp, videoResp] = await Promise.all([
+                        fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${API_KEY}&language=es-MX&append_to_response=credits`),
+                        fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}`)
                     ]);
-                    const credits = await cR.json();
-                    const videos = await vR.json();
+                    const details = await detailResp.json();
+                    const videos = await videoResp.json();
 
-                    document.getElementById('initial-message').style.display = 'none';
-                    document.getElementById('movie-display').style.display = 'flex';
+                    // Aplicar Banner y Poster
+                    if(details.backdrop_path) {
+                        document.getElementById('movie-banner').style.backgroundImage = `url(https://image.tmdb.org/t/p/original${details.backdrop_path})`;
+                    }
+                    document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
                     
-                    const title = movieData.title;
-                    document.getElementById('movie-title').innerText = title;
-                    const year = movieData.release_date ? movieData.release_date.split('-')[0] : '';
-                    document.getElementById('movie-year').innerText = `(${year})`;
+                    // Llenar datos
+                    document.getElementById('title').innerText = movie.title;
+                    document.getElementById('year').innerText = movie.release_date.split('-')[0];
+                    document.getElementById('rating').innerText = `★ ${movie.vote_average.toFixed(1)}`;
+                    document.getElementById('overview').innerText = movie.overview || "Sinopsis no disponible.";
                     
-                    const oTitle = document.getElementById('movie-original-title');
-                    oTitle.innerText = (movieData.original_title !== movieData.title) ? movieData.original_title : "";
-                    
-                    document.getElementById('movie-rating').innerHTML = `★ ${movieData.vote_average.toFixed(1)}`;
-                    document.getElementById('movie-overview').innerText = movieData.overview || "Sinopsis no disponible.";
-                    poster.src = `https://image.tmdb.org/t/p/w500${movieData.poster_path}`;
+                    const dir = details.credits.crew.find(c => c.job === 'Director');
+                    document.getElementById('director').innerText = dir ? dir.name : 'Director desconocido';
 
-                    const dir = credits.crew.find(p => p.job === 'Director');
-                    document.getElementById('movie-director').innerText = dir ? dir.name : 'No disponible';
+                    // Botones
+                    const trailer = videos.results.find(v => v.type === 'Trailer');
+                    document.getElementById('btn-trailer').href = trailer ? `https://youtube.com/watch?v=${trailer.key}` : '#';
+                    document.getElementById('btn-jw').href = `https://www.justwatch.com/ar/buscar?q=${encodeURIComponent(movie.title)}`;
 
-                    document.getElementById('movie-cast').innerHTML = credits.cast.slice(0, 4).map(a => `
-                        <div class="actor-item">
-                            <img src="${a.profile_path ? 'https://image.tmdb.org/t/p/w185' + a.profile_path : 'https://via.placeholder.com/60'}" class="actor-img">
-                            <span class="actor-name">${a.name}</span>
-                        </div>`).join('');
-
-                    // Lógica Tráiler
-                    const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-                    const btnT = document.getElementById('btn-trailer');
-                    if (trailer) {
-                        btnT.href = `https://www.youtube.com/watch?v=${trailer.key}`;
-                        btnT.style.display = 'inline-flex';
-                    } else { btnT.style.display = 'none'; }
-
-                    // Lógica JustWatch (Buscador)
-                    const btnP = document.getElementById('btn-platforms');
-                    btnP.href = `https://www.justwatch.com/ar/buscar?q=${encodeURIComponent(title)}`;
+                    document.getElementById('movie-card').style.display = 'grid';
                 }
             } catch (e) { console.error(e); }
 
-            btn.disabled = false;
             btn.innerText = "¡SORPRENDEME!";
+            btn.disabled = false;
         }
     </script>
 </body>
