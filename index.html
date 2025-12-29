@@ -6,11 +6,10 @@
     <title>Movie Finder - @mundoo.cine</title>
     <style>
         :root { 
-            --primary: #6c70b0; 
+            --primary: #6c70b0; /* Tu color Lila */
             --bg-color: #14181c; 
             --text-main: #ffffff; 
             --text-sec: #9ab; 
-            --lb-green: #00e054;
             --yt-red: #ff0000;
             --jw-yellow: #fbc02d;
         }
@@ -22,6 +21,7 @@
             overflow-x: hidden;
         }
 
+        /* FONDO NÍTIDO PARA PC */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             opacity: 0.05; pointer-events: none; z-index: 1000;
@@ -30,7 +30,7 @@
 
         .main-wrapper { width: 92%; max-width: 750px; padding: 25px 0; position: relative; z-index: 10; }
 
-        .user-header { text-align: center; margin-bottom: 20px; }
+        .user-header { text-align: center; margin-bottom: 30px; }
         .avatar { width: 55px; height: 55px; border-radius: 50%; border: 1.5px solid var(--primary); margin-bottom: 8px; }
         .social-row { display: flex; justify-content: center; gap: 15px; margin-top: 8px; }
         .social-icon { width: 18px; height: 18px; transition: 0.3s; opacity: 0.7; }
@@ -38,7 +38,7 @@
 
         /* MOVIE DETAIL */
         .hero-banner {
-            width: 100%; height: 300px; background-size: cover; background-position: center;
+            width: 100%; height: 320px; background-size: cover; background-position: center;
             border-radius: 12px; display: none; position: relative;
         }
         .hero-banner::after {
@@ -46,68 +46,60 @@
             background: linear-gradient(to bottom, transparent 0%, var(--bg-color) 95%);
         }
 
-        .movie-header { display: none; align-items: flex-end; gap: 20px; margin-top: -80px; position: relative; z-index: 20; }
-        .poster-container { flex: 0 0 110px; }
-        .poster-img { width: 100%; border-radius: 4px; box-shadow: 0 8px 25px rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.1); }
+        .movie-header { display: none; align-items: flex-end; gap: 20px; margin-top: -85px; position: relative; z-index: 20; }
+        .poster-container { flex: 0 0 115px; }
+        .poster-img { width: 100%; border-radius: 4px; box-shadow: 0 8px 30px rgba(0,0,0,1); border: 1px solid rgba(255,255,255,0.1); }
 
         .info-container { flex: 1; }
-        .movie-title h1 { font-size: 1.5rem; margin: 0; font-weight: 800; line-height: 1.1; }
+        .movie-title h1 { font-size: 1.6rem; margin: 0; font-weight: 800; line-height: 1.1; }
         .movie-meta { color: var(--text-sec); font-size: 0.75rem; margin-top: 4px; }
-        .dir-name { color: #eee; font-size: 0.85rem; font-weight: 500; display: block; margin-top: 2px; }
-        .stars-row { color: var(--lb-green); font-size: 1.1rem; margin-top: 8px; letter-spacing: 1px; }
+        .dir-name { color: #eee; font-size: 0.85rem; font-weight: 500; display: block; margin-top: 4px; }
+        
+        /* ESTRELLAS LILA */
+        .stars-row { color: var(--primary); font-size: 1.2rem; margin-top: 8px; letter-spacing: 1px; }
 
-        .btn-group { display: flex; gap: 8px; margin-top: 12px; }
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
         .btn-app {
-            background: #456; color: white; border: none; padding: 7px 12px; border-radius: 4px;
-            font-size: 0.65rem; font-weight: 700; cursor: pointer; text-decoration: none; text-transform: uppercase;
+            background: #2c3440; color: white; border: none; padding: 8px 15px; border-radius: 4px;
+            font-size: 0.7rem; font-weight: 700; cursor: pointer; text-decoration: none; text-transform: uppercase;
+            transition: 0.2s; white-space: nowrap;
         }
         .btn-trailer:hover { background: var(--yt-red) !important; }
         .btn-jw:hover { background: var(--jw-yellow) !important; color: black; }
 
-        .synopsis { font-size: 0.9rem; line-height: 1.5; color: #ccddee; margin: 25px 0; }
+        .synopsis { font-size: 0.95rem; line-height: 1.6; color: #ccddee; margin: 30px 0; }
 
         .section-label { font-size: 0.65rem; color: var(--text-sec); text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #2c3440; padding-bottom: 8px; margin: 25px 0 15px 0; }
-        .horizontal-list { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
-        .cast-item { min-width: 60px; text-align: center; }
-        .cast-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .horizontal-list { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .cast-item { min-width: 65px; text-align: center; }
+        .cast-img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 1px solid #334455; }
         
         .grid-display { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
         .grid-item img { width: 100%; border-radius: 4px; cursor: pointer; transition: 0.3s; }
         .grid-item img:hover { transform: scale(1.05); }
 
-        /* FOOTER FILTERS & SEARCH INTEGRATED */
+        /* FOOTER CONTROLS */
         .controls-footer { 
-            text-align: center; margin-top: 40px; padding: 25px; 
+            text-align: center; margin-top: 40px; padding: 30px; 
             background: rgba(0,0,0,0.2); border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; gap: 15px;
         }
 
-        .search-container {
-            width: 100%; max-width: 320px; position: relative; display: flex; gap: 5px;
-        }
-        #search-input { 
-            flex: 1; background: #2c3440; border: 1px solid #456; 
-            padding: 10px 15px; border-radius: 6px; color: white; font-size: 0.85rem; outline: none;
-        }
-        .search-btn {
-            background: #456; border: none; color: white; padding: 0 12px; 
-            border-radius: 6px; cursor: pointer; font-size: 0.9rem;
-        }
-
-        .filter-row { display: flex; gap: 8px; justify-content: center; width: 100%; }
-        select { background: #2c3440; color: white; border: none; padding: 10px; border-radius: 6px; font-size: 0.8rem; flex: 1; max-width: 155px; }
+        .filter-row { display: flex; gap: 10px; justify-content: center; width: 100%; max-width: 340px; }
+        select { background: #2c3440; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 0.85rem; flex: 1; outline: none; }
         
         .btn-sortear { 
-            background: var(--primary); color: white; border: none; padding: 16px; 
-            border-radius: 8px; font-weight: bold; width: 100%; max-width: 320px; 
-            cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;
+            background: var(--primary); color: white; border: none; padding: 18px; 
+            border-radius: 10px; font-weight: bold; width: 100%; max-width: 340px; 
+            cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
         }
-        .btn-sortear:hover { background: #7b7fc2; }
+        .btn-sortear:hover { background: #7b7fc2; transform: translateY(-2px); }
 
         @media (max-width: 500px) {
-            .poster-container { flex: 0 0 85px; }
-            .movie-title h1 { font-size: 1.2rem; }
+            .poster-container { flex: 0 0 95px; }
+            .movie-title h1 { font-size: 1.3rem; }
             .btn-group { flex-wrap: wrap; }
+            .btn-app { flex: 1; text-align: center; }
         }
     </style>
 </head>
@@ -116,7 +108,7 @@
     <div class="main-wrapper">
         <div class="user-header">
             <img src="avatar.jpg" class="avatar">
-            <div style="font-size: 0.85rem; font-weight: 700;">@mundoo.cine</div>
+            <div style="font-size: 0.9rem; font-weight: 700;">@mundoo.cine</div>
             <div class="social-row">
                 <a href="https://instagram.com/mundoo.cine" target="_blank"><svg class="social-icon" viewBox="0 0 24 24"><defs><radialGradient id="ig-grad" r="150%" cx="30%" cy="107%"><stop stop-color="#fdf497" offset="0"/><stop stop-color="#fd5949" offset="0.45"/><stop stop-color="#d6249f" offset="0.6"/><stop stop-color="#285AEB" offset="0.9"/></radialGradient></defs><path fill="url(#ig-grad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.073-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
                 <a href="https://boxd.it/37NZT" target="_blank"><svg class="social-icon" viewBox="0 0 38 38"><circle fill="#00E054" cx="7" cy="19" r="7"/><circle fill="#FF8000" cx="19" cy="19" r="7"/><circle fill="#40BCF4" cx="31" cy="19" r="7"/></svg></a>
@@ -137,7 +129,7 @@
                 </div>
                 <div class="btn-group">
                     <a id="btn-trailer" href="#" target="_blank" class="btn-app btn-trailer">▶ Tráiler</a>
-                    <a id="btn-jw" href="#" target="_blank" class="btn-app btn-jw">📺 Ver plataformas</a>
+                    <a id="btn-jw" href="#" target="_blank" class="btn-app btn-jw">🔍 ¿Dónde Ver?</a>
                 </div>
             </div>
         </div>
@@ -145,32 +137,28 @@
         <div id="overview" class="synopsis"></div>
 
         <div id="cast-section" style="display:none;">
-            <div class="section-label">Reparto</div>
+            <div class="section-label">Reparto Principal</div>
             <div id="cast-list" class="horizontal-list"></div>
         </div>
 
         <div id="grid-section" style="display:none;">
-            <div id="grid-label" class="section-label">Películas Similares</div>
+            <div class="section-label">Películas Similares</div>
             <div id="grid-display" class="grid-display"></div>
         </div>
 
         <div class="controls-footer">
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Buscar título, actor o director..." onkeydown="if(event.key === 'Enter') { buscar(); event.preventDefault(); }">
-                <button class="search-btn" onclick="buscar()">🔍</button>
-            </div>
-            
             <div class="filter-row">
                 <select id="filter-genre">
                     <option value="">Géneros</option>
-                    <option value="28">Acción</option><option value="35">Comedia</option>
-                    <option value="18">Drama</option><option value="27">Terror</option>
-                    <option value="878">Sci-Fi</option><option value="53">Thriller</option>
+                    <option value="28">Acción</option><option value="12">Aventura</option><option value="16">Animación</option>
+                    <option value="35">Comedia</option><option value="80">Crimen</option><option value="18">Drama</option>
+                    <option value="14">Fantasía</option><option value="27">Terror</option><option value="878">Sci-Fi</option>
+                    <option value="53">Thriller</option>
                 </select>
                 <select id="filter-decade">
-                    <option value="">Años</option>
+                    <option value="">Décadas</option>
                     <option value="2020">2020s</option><option value="2010">2010s</option><option value="2000">2000s</option>
-                    <option value="1990">1990s</option><option value="1980">1980s</option>
+                    <option value="1990">1990s</option><option value="1980">1980s</option><option value="1970">1970s</option>
                 </select>
             </div>
             <button class="btn-sortear" onclick="sortear()">¡Sorprendeme!</button>
@@ -195,14 +183,13 @@
                 document.getElementById('movie-info').style.display = 'flex';
                 document.getElementById('cast-section').style.display = 'block';
                 document.getElementById('grid-section').style.display = 'block';
-                document.getElementById('grid-label').innerText = "Películas Similares";
 
                 if(details.backdrop_path) document.getElementById('hero').style.backgroundImage = `url(https://image.tmdb.org/t/p/w1280${details.backdrop_path})`;
                 document.getElementById('title').innerText = details.title;
                 document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${details.poster_path}`;
                 document.getElementById('year').innerText = details.release_date.split('-')[0];
                 document.getElementById('runtime').innerText = (details.runtime || 0) + " min";
-                document.getElementById('overview').innerText = details.overview || "Sin sinopsis disponible.";
+                document.getElementById('overview').innerText = details.overview || "Sinopsis no disponible.";
                 
                 const stars = Math.round(details.vote_average / 2);
                 document.getElementById('stars').innerHTML = '★'.repeat(stars) + '<span style="opacity:0.15">' + '★'.repeat(5-stars) + '</span>';
@@ -210,10 +197,10 @@
                 const dir = details.credits.crew.find(c => c.job === 'Director');
                 document.getElementById('director').innerText = dir ? `Dirigida por ${dir.name}` : '';
 
-                document.getElementById('cast-list').innerHTML = details.credits.cast.slice(0, 10).map(a => `
+                document.getElementById('cast-list').innerHTML = details.credits.cast.slice(0, 12).map(a => `
                     <div class="cast-item">
-                        <img src="${a.profile_path ? 'https://image.tmdb.org/t/p/w185' + a.profile_path : 'https://via.placeholder.com/50'}" class="cast-img">
-                        <div style="font-size:0.55rem; color:#9ab; margin-top:4px;">${a.name}</div>
+                        <img src="${a.profile_path ? 'https://image.tmdb.org/t/p/w185' + a.profile_path : 'https://via.placeholder.com/60'}" class="cast-img">
+                        <div style="font-size:0.55rem; color:#9ab; margin-top:5px; line-height:1.1;">${a.name}</div>
                     </div>`).join('');
 
                 const trailer = videos.results.find(v => v.type === 'Trailer' || v.type === 'Teaser');
@@ -227,45 +214,18 @@
             } catch (e) { console.error(e); }
         }
 
-        async function buscar() {
-            const query = document.getElementById('search-input').value;
-            if(!query) return;
-            try {
-                const resp = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=es-MX&query=${encodeURIComponent(query)}`);
-                const data = await resp.json();
-                
-                if(data.results.length > 0) {
-                    const res = data.results[0];
-                    if(res.media_type === 'movie') {
-                        loadMovie(res.id);
-                    } else if(res.media_type === 'person') {
-                        const creditsResp = await fetch(`https://api.themoviedb.org/3/person/${res.id}/movie_credits?api_key=${API_KEY}&language=es-MX`);
-                        const creditsData = await creditsResp.json();
-                        
-                        document.getElementById('grid-section').style.display = 'block';
-                        document.getElementById('grid-label').innerText = `Obras de ${res.name}`;
-                        document.getElementById('grid-display').innerHTML = creditsData.cast.concat(creditsData.crew)
-                            .filter((v,i,a)=>a.findIndex(t=>(t.id===v.id))===i && (v.poster_path))
-                            .sort((a,b) => (b.vote_count || 0) - (a.vote_count || 0))
-                            .slice(0, 18)
-                            .map(m => `<div class="grid-item" onclick="loadMovie(${m.id})"><img src="https://image.tmdb.org/t/p/w342${m.poster_path}"></div>`)
-                            .join('');
-                        
-                        document.getElementById('grid-section').scrollIntoView({behavior: 'smooth'});
-                    }
-                }
-            } catch (e) { console.error("Error en búsqueda:", e); }
-        }
-
         async function sortear() {
             const g = document.getElementById('filter-genre').value;
             const d = document.getElementById('filter-decade').value;
-            let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&page=${Math.floor(Math.random() * 8) + 1}`;
+            let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&page=${Math.floor(Math.random() * 10) + 1}`;
             if (g) url += `&with_genres=${g}`;
             if (d) url += `&primary_release_date.gte=${d}-01-01&primary_release_date.lte=${parseInt(d)+9}-12-31`;
+            
             const resp = await fetch(url);
             const data = await resp.json();
-            if(data.results.length > 0) loadMovie(data.results[Math.floor(Math.random() * data.results.length)].id);
+            if(data.results && data.results.length > 0) {
+                loadMovie(data.results[Math.floor(Math.random() * data.results.length)].id);
+            }
         }
     </script>
 </body>
