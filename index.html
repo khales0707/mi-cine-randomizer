@@ -10,7 +10,7 @@
             --bg-color: #14181c; 
             --text-main: #ffffff; 
             --text-sec: #9ab; 
-            --lb-green: #00e054; /* Verde Letterboxd */
+            --lb-green: #00e054;
             --yt-red: #ff0000;
             --jw-yellow: #fbc02d;
         }
@@ -22,7 +22,6 @@
             overflow-x: hidden;
         }
 
-        /* FONDO NÍTIDO PARA PC */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             opacity: 0.05; pointer-events: none; z-index: 1000;
@@ -31,19 +30,11 @@
 
         .main-wrapper { width: 92%; max-width: 750px; padding: 25px 0; position: relative; z-index: 10; }
 
-        /* HEADER & SOCIAL */
         .user-header { text-align: center; margin-bottom: 20px; }
         .avatar { width: 55px; height: 55px; border-radius: 50%; border: 1.5px solid var(--primary); margin-bottom: 8px; }
         .social-row { display: flex; justify-content: center; gap: 15px; margin-top: 8px; }
         .social-icon { width: 18px; height: 18px; transition: 0.3s; opacity: 0.7; }
         .social-icon:hover { opacity: 1; transform: translateY(-2px); }
-
-        /* SEARCH */
-        .search-box { margin-bottom: 20px; }
-        #search-input { 
-            width: 100%; background: #2c3440; border: 1px solid #456; 
-            padding: 12px 20px; border-radius: 8px; color: white; font-size: 0.9rem; outline: none;
-        }
 
         /* MOVIE DETAIL */
         .hero-banner {
@@ -63,8 +54,6 @@
         .movie-title h1 { font-size: 1.5rem; margin: 0; font-weight: 800; line-height: 1.1; }
         .movie-meta { color: var(--text-sec); font-size: 0.75rem; margin-top: 4px; }
         .dir-name { color: #eee; font-size: 0.85rem; font-weight: 500; display: block; margin-top: 2px; }
-        
-        /* ESTRELLAS ESTILO LETTERBOXD */
         .stars-row { color: var(--lb-green); font-size: 1.1rem; margin-top: 8px; letter-spacing: 1px; }
 
         .btn-group { display: flex; gap: 8px; margin-top: 12px; }
@@ -75,9 +64,8 @@
         .btn-trailer:hover { background: var(--yt-red) !important; }
         .btn-jw:hover { background: var(--jw-yellow) !important; color: black; }
 
-        .synopsis { font-size: 0.9rem; line-height: 1.5; color: #ccddee; margin: 25px 0; text-align: left; }
+        .synopsis { font-size: 0.9rem; line-height: 1.5; color: #ccddee; margin: 25px 0; }
 
-        /* GRID SECTIONS */
         .section-label { font-size: 0.65rem; color: var(--text-sec); text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #2c3440; padding-bottom: 8px; margin: 25px 0 15px 0; }
         .horizontal-list { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
         .cast-item { min-width: 60px; text-align: center; }
@@ -87,11 +75,34 @@
         .grid-item img { width: 100%; border-radius: 4px; cursor: pointer; transition: 0.3s; }
         .grid-item img:hover { transform: scale(1.05); }
 
-        /* FOOTER FILTERS */
-        .controls-footer { text-align: center; margin-top: 40px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 12px; }
-        .filter-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 15px; }
-        select { background: #2c3440; color: white; border: none; padding: 10px; border-radius: 6px; font-size: 0.8rem; }
-        .btn-sortear { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: bold; width: 100%; max-width: 300px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        /* FOOTER FILTERS & SEARCH INTEGRATED */
+        .controls-footer { 
+            text-align: center; margin-top: 40px; padding: 25px; 
+            background: rgba(0,0,0,0.2); border-radius: 12px;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+
+        .search-container {
+            width: 100%; max-width: 320px; position: relative; display: flex; gap: 5px;
+        }
+        #search-input { 
+            flex: 1; background: #2c3440; border: 1px solid #456; 
+            padding: 10px 15px; border-radius: 6px; color: white; font-size: 0.85rem; outline: none;
+        }
+        .search-btn {
+            background: #456; border: none; color: white; padding: 0 12px; 
+            border-radius: 6px; cursor: pointer; font-size: 0.9rem;
+        }
+
+        .filter-row { display: flex; gap: 8px; justify-content: center; width: 100%; }
+        select { background: #2c3440; color: white; border: none; padding: 10px; border-radius: 6px; font-size: 0.8rem; flex: 1; max-width: 155px; }
+        
+        .btn-sortear { 
+            background: var(--primary); color: white; border: none; padding: 16px; 
+            border-radius: 8px; font-weight: bold; width: 100%; max-width: 320px; 
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;
+        }
+        .btn-sortear:hover { background: #7b7fc2; }
 
         @media (max-width: 500px) {
             .poster-container { flex: 0 0 85px; }
@@ -111,10 +122,6 @@
                 <a href="https://boxd.it/37NZT" target="_blank"><svg class="social-icon" viewBox="0 0 38 38"><circle fill="#00E054" cx="7" cy="19" r="7"/><circle fill="#FF8000" cx="19" cy="19" r="7"/><circle fill="#40BCF4" cx="31" cy="19" r="7"/></svg></a>
                 <a href="https://x.com/soy_Khales" target="_blank"><svg class="social-icon" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
             </div>
-        </div>
-
-        <div class="search-box">
-            <input type="text" id="search-input" placeholder="Buscar película, actor o director..." onkeydown="if(event.key === 'Enter') buscar()">
         </div>
 
         <div id="hero" class="hero-banner"></div>
@@ -148,6 +155,11 @@
         </div>
 
         <div class="controls-footer">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar título, actor o director..." onkeydown="if(event.key === 'Enter') { buscar(); event.preventDefault(); }">
+                <button class="search-btn" onclick="buscar()">🔍</button>
+            </div>
+            
             <div class="filter-row">
                 <select id="filter-genre">
                     <option value="">Géneros</option>
@@ -189,8 +201,8 @@
                 document.getElementById('title').innerText = details.title;
                 document.getElementById('poster').src = `https://image.tmdb.org/t/p/w500${details.poster_path}`;
                 document.getElementById('year').innerText = details.release_date.split('-')[0];
-                document.getElementById('runtime').innerText = details.runtime + " min";
-                document.getElementById('overview').innerText = details.overview;
+                document.getElementById('runtime').innerText = (details.runtime || 0) + " min";
+                document.getElementById('overview').innerText = details.overview || "Sin sinopsis disponible.";
                 
                 const stars = Math.round(details.vote_average / 2);
                 document.getElementById('stars').innerHTML = '★'.repeat(stars) + '<span style="opacity:0.15">' + '★'.repeat(5-stars) + '</span>';
@@ -204,7 +216,7 @@
                         <div style="font-size:0.55rem; color:#9ab; margin-top:4px;">${a.name}</div>
                     </div>`).join('');
 
-                const trailer = videos.results.find(v => v.type === 'Trailer');
+                const trailer = videos.results.find(v => v.type === 'Trailer' || v.type === 'Teaser');
                 document.getElementById('btn-trailer').href = trailer ? `https://youtube.com/watch?v=${trailer.key}` : '#';
                 document.getElementById('btn-jw').href = `https://www.justwatch.com/ar/buscar?q=${encodeURIComponent(details.title)}`;
 
@@ -218,37 +230,37 @@
         async function buscar() {
             const query = document.getElementById('search-input').value;
             if(!query) return;
-            const resp = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=es-MX&query=${encodeURIComponent(query)}`);
-            const data = await resp.json();
-            
-            if(data.results.length > 0) {
-                const res = data.results[0];
-                if(res.media_type === 'movie') {
-                    loadMovie(res.id);
-                } else if(res.media_type === 'person') {
-                    // BUSCAR TODAS LAS OBRAS DEL DIRECTOR/ACTOR
-                    const creditsResp = await fetch(`https://api.themoviedb.org/3/person/${res.id}/movie_credits?api_key=${API_KEY}&language=es-MX`);
-                    const creditsData = await creditsResp.json();
-                    
-                    document.getElementById('grid-section').style.display = 'block';
-                    document.getElementById('grid-label').innerText = `Obras de ${res.name}`;
-                    document.getElementById('grid-display').innerHTML = creditsData.cast.concat(creditsData.crew)
-                        .filter((v,i,a)=>a.findIndex(t=>(t.id===v.id))===i) // Quitar duplicados
-                        .sort((a,b) => b.popularity - a.popularity)
-                        .slice(0, 20)
-                        .map(m => `<div class="grid-item" onclick="loadMovie(${m.id})"><img src="${m.poster_path ? 'https://image.tmdb.org/t/p/w342'+m.poster_path : 'https://via.placeholder.com/100x150'}"></div>`)
-                        .join('');
-                    
-                    // Hacer scroll hasta los resultados
-                    document.getElementById('grid-section').scrollIntoView({behavior: 'smooth'});
+            try {
+                const resp = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=es-MX&query=${encodeURIComponent(query)}`);
+                const data = await resp.json();
+                
+                if(data.results.length > 0) {
+                    const res = data.results[0];
+                    if(res.media_type === 'movie') {
+                        loadMovie(res.id);
+                    } else if(res.media_type === 'person') {
+                        const creditsResp = await fetch(`https://api.themoviedb.org/3/person/${res.id}/movie_credits?api_key=${API_KEY}&language=es-MX`);
+                        const creditsData = await creditsResp.json();
+                        
+                        document.getElementById('grid-section').style.display = 'block';
+                        document.getElementById('grid-label').innerText = `Obras de ${res.name}`;
+                        document.getElementById('grid-display').innerHTML = creditsData.cast.concat(creditsData.crew)
+                            .filter((v,i,a)=>a.findIndex(t=>(t.id===v.id))===i && (v.poster_path))
+                            .sort((a,b) => (b.vote_count || 0) - (a.vote_count || 0))
+                            .slice(0, 18)
+                            .map(m => `<div class="grid-item" onclick="loadMovie(${m.id})"><img src="https://image.tmdb.org/t/p/w342${m.poster_path}"></div>`)
+                            .join('');
+                        
+                        document.getElementById('grid-section').scrollIntoView({behavior: 'smooth'});
+                    }
                 }
-            }
+            } catch (e) { console.error("Error en búsqueda:", e); }
         }
 
         async function sortear() {
             const g = document.getElementById('filter-genre').value;
             const d = document.getElementById('filter-decade').value;
-            let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&page=${Math.floor(Math.random() * 10) + 1}`;
+            let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=vote_count.desc&page=${Math.floor(Math.random() * 8) + 1}`;
             if (g) url += `&with_genres=${g}`;
             if (d) url += `&primary_release_date.gte=${d}-01-01&primary_release_date.lte=${parseInt(d)+9}-12-31`;
             const resp = await fetch(url);
