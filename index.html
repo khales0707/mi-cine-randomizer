@@ -11,7 +11,9 @@
             --text-main: #ffffff; 
             --text-sec: #9ab; 
             --yt-red: #ff0000;
-            --jw-yellow: #fbc02d;
+            --imdb-gold: #f5c518;
+            --lb-green: #00e054;
+            --tmdb-blue: #01b4e4;
         }
 
         body { 
@@ -58,14 +60,16 @@
         /* ESTRELLAS LILA */
         .stars-row { color: var(--primary); font-size: 1.2rem; margin-top: 8px; letter-spacing: 1px; }
 
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
         .btn-app {
-            background: #2c3440; color: white; border: none; padding: 8px 15px; border-radius: 4px;
-            font-size: 0.7rem; font-weight: 700; cursor: pointer; text-decoration: none; text-transform: uppercase;
-            transition: 0.2s; white-space: nowrap;
+            background: #2c3440; color: white; border: none; padding: 8px 12px; border-radius: 4px;
+            font-size: 0.65rem; font-weight: 700; cursor: pointer; text-decoration: none; text-transform: uppercase;
+            transition: 0.2s; white-space: nowrap; flex: 1; text-align: center; min-width: 80px;
         }
         .btn-trailer:hover { background: var(--yt-red) !important; }
-        .btn-jw:hover { background: var(--jw-yellow) !important; color: black; }
+        .btn-imdb:hover { background: var(--imdb-gold) !important; color: black; }
+        .btn-lb:hover { background: var(--lb-green) !important; color: black; }
+        .btn-tmdb:hover { background: var(--tmdb-blue) !important; color: white; }
 
         .synopsis { font-size: 0.95rem; line-height: 1.6; color: #ccddee; margin: 30px 0; }
 
@@ -98,8 +102,8 @@
         @media (max-width: 500px) {
             .poster-container { flex: 0 0 95px; }
             .movie-title h1 { font-size: 1.3rem; }
-            .btn-group { flex-wrap: wrap; }
-            .btn-app { flex: 1; text-align: center; }
+            .btn-group { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+            .btn-app { min-width: 0; }
         }
     </style>
 </head>
@@ -110,7 +114,7 @@
             <img src="avatar.jpg" class="avatar">
             <div style="font-size: 0.9rem; font-weight: 700;">@mundoo.cine</div>
             <div class="social-row">
-                <a href="https://instagram.com/mundoo.cine" target="_blank"><svg class="social-icon" viewBox="0 0 24 24"><defs><radialGradient id="ig-grad" r="150%" cx="30%" cy="107%"><stop stop-color="#fdf497" offset="0"/><stop stop-color="#fd5949" offset="0.45"/><stop stop-color="#d6249f" offset="0.6"/><stop stop-color="#285AEB" offset="0.9"/></radialGradient></defs><path fill="url(#ig-grad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0 3.259-.014-3.667-.073-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                <a href="https://instagram.com/mundoo.cine" target="_blank"><svg class="social-icon" viewBox="0 0 24 24"><defs><radialGradient id="ig-grad" r="150%" cx="30%" cy="107%"><stop stop-color="#fdf497" offset="0"/><stop stop-color="#fd5949" offset="0.45"/><stop stop-color="#d6249f" offset="0.6"/><stop stop-color="#285AEB" offset="0.9"/></radialGradient></defs><path fill="url(#ig-grad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.073-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
                 <a href="https://boxd.it/37NZT" target="_blank"><svg class="social-icon" viewBox="0 0 38 38"><circle fill="#00E054" cx="7" cy="19" r="7"/><circle fill="#FF8000" cx="19" cy="19" r="7"/><circle fill="#40BCF4" cx="31" cy="19" r="7"/></svg></a>
                 <a href="https://x.com/soy_Khales" target="_blank"><svg class="social-icon" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
             </div>
@@ -129,7 +133,9 @@
                 </div>
                 <div class="btn-group">
                     <a id="btn-trailer" href="#" target="_blank" class="btn-app btn-trailer">▶ Tráiler</a>
-                    <a id="btn-jw" href="#" target="_blank" class="btn-app btn-jw">🔍 ¿Dónde Ver?</a>
+                    <a id="btn-imdb" href="#" target="_blank" class="btn-app btn-imdb">IMDb</a>
+                    <a id="btn-lb" href="#" target="_blank" class="btn-app btn-lb">Letterboxd</a>
+                    <a id="btn-tmdb" href="#" target="_blank" class="btn-app btn-tmdb">TMDB</a>
                 </div>
             </div>
         </div>
@@ -205,7 +211,18 @@
 
                 const trailer = videos.results.find(v => v.type === 'Trailer' || v.type === 'Teaser');
                 document.getElementById('btn-trailer').href = trailer ? `https://youtube.com/watch?v=${trailer.key}` : '#';
-                document.getElementById('btn-jw').href = `https://www.justwatch.com/ar/buscar?q=${encodeURIComponent(details.title)}`;
+                
+                // Enlaces de las nuevas plataformas cinematográficas
+                if(details.imdb_id) {
+                    document.getElementById('btn-imdb').href = `https://www.imdb.com/title/${details.imdb_id}`;
+                    document.getElementById('btn-imdb').style.display = 'inline-block';
+                } else {
+                    document.getElementById('btn-imdb').style.display = 'none';
+                }
+                
+                const movieQuery = encodeURIComponent(details.title);
+                document.getElementById('btn-lb').href = `https://letterboxd.com/search/${movieQuery}`;
+                document.getElementById('btn-tmdb').href = `https://www.themoviedb.org/search?query=${movieQuery}`;
 
                 document.getElementById('grid-display').innerHTML = similar.results.slice(0, 8).map(m => `
                     <div class="grid-item" onclick="loadMovie(${m.id})"><img src="https://image.tmdb.org/t/p/w342${m.poster_path}"></div>`).join('');
