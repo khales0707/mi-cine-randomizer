@@ -53,19 +53,23 @@
         .poster-img { width: 100%; border-radius: 4px; box-shadow: 0 8px 30px rgba(0,0,0,1); border: 1px solid rgba(255,255,255,0.1); }
 
         .info-container { flex: 1; }
-        .movie-title h1 { font-size: 1.6rem; margin: 0; font-weight: 800; line-height: 1.1; }
+        .movie-title h1 { font-size: 1.6rem; margin: 0; font-weight: 800; line-height: 1.1; letter-spacing: -0.5px; }
         .movie-meta { color: var(--text-sec); font-size: 0.75rem; margin-top: 4px; }
         .dir-name { color: #eee; font-size: 0.85rem; font-weight: 500; display: block; margin-top: 4px; }
         
         /* ESTRELLAS LILA */
         .stars-row { color: var(--primary); font-size: 1.2rem; margin-top: 8px; letter-spacing: 1px; }
 
+        /* BOTONES CON ICONOS LOGOS */
         .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
         .btn-app {
-            background: #2c3440; color: white; border: none; padding: 8px 12px; border-radius: 4px;
+            background: #2c3440; color: white; border: none; padding: 10px 12px; border-radius: 5px;
             font-size: 0.65rem; font-weight: 700; cursor: pointer; text-decoration: none; text-transform: uppercase;
-            transition: 0.2s; white-space: nowrap; flex: 1; text-align: center; min-width: 80px;
+            transition: 0.2s; white-space: nowrap; flex: 1; min-width: 85px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
         }
+        .btn-icon { width: 14px; height: 14px; vertical-align: middle; }
+        
         .btn-trailer:hover { background: var(--yt-red) !important; }
         .btn-imdb:hover { background: var(--imdb-gold) !important; color: black; }
         .btn-lb:hover { background: var(--lb-green) !important; color: black; }
@@ -102,8 +106,8 @@
         @media (max-width: 500px) {
             .poster-container { flex: 0 0 95px; }
             .movie-title h1 { font-size: 1.3rem; }
-            .btn-group { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
-            .btn-app { min-width: 0; }
+            .btn-group { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 6px; }
+            .btn-app { min-width: 0; padding: 10px 6px; }
         }
     </style>
 </head>
@@ -132,10 +136,22 @@
                     <div id="stars" class="stars-row"></div>
                 </div>
                 <div class="btn-group">
-                    <a id="btn-trailer" href="#" target="_blank" class="btn-app btn-trailer">▶ Tráiler</a>
-                    <a id="btn-imdb" href="#" target="_blank" class="btn-app btn-imdb">IMDb</a>
-                    <a id="btn-lb" href="#" target="_blank" class="btn-app btn-lb">Letterboxd</a>
-                    <a id="btn-tmdb" href="#" target="_blank" class="btn-app btn-tmdb">TMDB</a>
+                    <a id="btn-trailer" href="#" target="_blank" class="btn-app btn-trailer">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        Tráiler
+                    </a>
+                    <a id="btn-imdb" href="#" target="_blank" class="btn-app btn-imdb">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.32 13.06c0 .48-.38.86-.86.86H10.1c-.48 0-.86-.38-.86-.86V8.94c0-.48.38-.86.86-.86H14.46c.48 0 .86.38.86.86v6.12z"/></svg>
+                        IMDb
+                    </a>
+                    <a id="btn-lb" href="#" target="_blank" class="btn-app btn-lb">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7.75 12a4.25 4.25 0 1 1 8.5 0 4.25 4.25 0 0 1-8.5 0zm-4.25 0a4.25 4.25 0 1 1 4.25-4.25A4.25 4.25 0 0 1 3.5 12zm17 0a4.25 4.25 0 1 1-4.25-4.25A4.25 4.25 0 0 1 20.5 12z"/></svg>
+                        Letterboxd
+                    </a>
+                    <a id="btn-tmdb" href="#" target="_blank" class="btn-app btn-tmdb">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+                        TMDB
+                    </a>
                 </div>
             </div>
         </div>
@@ -212,10 +228,9 @@
                 const trailer = videos.results.find(v => v.type === 'Trailer' || v.type === 'Teaser');
                 document.getElementById('btn-trailer').href = trailer ? `https://youtube.com/watch?v=${trailer.key}` : '#';
                 
-                // Enlaces de las nuevas plataformas cinematográficas
                 if(details.imdb_id) {
                     document.getElementById('btn-imdb').href = `https://www.imdb.com/title/${details.imdb_id}`;
-                    document.getElementById('btn-imdb').style.display = 'inline-block';
+                    document.getElementById('btn-imdb').style.display = 'inline-flex';
                 } else {
                     document.getElementById('btn-imdb').style.display = 'none';
                 }
