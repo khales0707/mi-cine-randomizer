@@ -10,7 +10,7 @@
             --bg-color: #14181c; 
             --text-main: #ffffff; 
             --text-sec: #9ab; 
-            --yt-red: #ff0000;
+            --yt-red: #e62117;
             --imdb-gold: #f5c518;
             --lb-green: #00e054;
             --tmdb-blue: #01b4e4;
@@ -60,24 +60,27 @@
         /* ESTRELLAS LILA */
         .stars-row { color: var(--primary); font-size: 1.2rem; margin-top: 8px; letter-spacing: 1px; }
 
-        /* BOTONES CON REFACTOR DE PROPORCIÓN EN ICONOS */
+        /* NUEVA BOTONERA SIN ICONOS - CON COLORES PROPIOS */
         .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
         .btn-app {
-            background: #2c3440; color: white; border: none; padding: 10px 12px; border-radius: 5px;
+            border: none; padding: 10px 12px; border-radius: 5px;
             font-size: 0.65rem; font-weight: 700; cursor: pointer; text-decoration: none; text-transform: uppercase;
             transition: 0.2s; white-space: nowrap; flex: 1; min-width: 85px;
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            display: inline-flex; align-items: center; justify-content: center;
         }
         
-        /* Ajuste fino de dimensiones independientes por logo */
-        .btn-icon { height: 14px; display: inline-block; flex-shrink: 0; vertical-align: middle; }
-        .icon-wide { width: 24px; } /* Para IMDb que es rectangular */
-        .icon-square { width: 14px; } /* Para los circulares/cuadrados */
-        
-        .btn-trailer:hover { background: var(--yt-red) !important; }
-        .btn-imdb:hover { background: var(--imdb-gold) !important; color: black; }
-        .btn-lb:hover { background: var(--lb-green) !important; color: black; }
-        .btn-tmdb:hover { background: var(--tmdb-blue) !important; color: white; }
+        /* Colores asignados a cada plataforma */
+        .btn-trailer { background: var(--yt-red); color: white; }
+        .btn-trailer:hover { background: #b31a12; }
+
+        .btn-imdb { background: var(--imdb-gold); color: #111111; }
+        .btn-imdb:hover { background: #dfb311; }
+
+        .btn-lb { background: #2c3440; color: white; border: 1px solid #456; }
+        .btn-lb:hover { background: var(--lb-green); color: #111111; border-color: var(--lb-green); }
+
+        .btn-tmdb { background: var(--tmdb-blue); color: white; }
+        .btn-tmdb:hover { background: #0196bf; }
 
         .synopsis { font-size: 0.95rem; line-height: 1.6; color: #ccddee; margin: 30px 0; }
 
@@ -122,7 +125,7 @@
             <img src="avatar.jpg" class="avatar">
             <div style="font-size: 0.9rem; font-weight: 700;">@mundoo.cine</div>
             <div class="social-row">
-                <a href="https://instagram.com/mundoo.cine" target="_blank"><svg class="social-icon" viewBox="0 0 24 24"><defs><radialGradient id="ig-grad" r="150%" cx="30%" cy="107%"><stop stop-color="#fdf497" offset="0"/><stop stop-color="#fd5949" offset="0.45"/><stop stop-color="#d6249f" offset="0.6"/><stop stop-color="#285AEB" offset="0.9"/></radialGradient></defs><path fill="url(#ig-grad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.073-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                <a href="https://instagram.com/mundoo.cine" target="_blank"><svg class="social-icon" viewBox="0 0 24 24"><defs><radialGradient id="ig-grad" r="150%" cx="30%" cy="107%"><stop stop-color="#fdf497" offset="0"/><stop stop-color="#fd5949" offset="0.45"/><stop stop-color="#d6249f" offset="0.6"/><stop stop-color="#285AEB" offset="0.9"/></radialGradient></defs><path fill="url(#ig-grad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0 3.259-.014-3.667-.073-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
                 <a href="https://boxd.it/37NZT" target="_blank"><svg class="social-icon" viewBox="0 0 38 38"><circle fill="#00E054" cx="7" cy="19" r="7"/><circle fill="#FF8000" cx="19" cy="19" r="7"/><circle fill="#40BCF4" cx="31" cy="19" r="7"/></svg></a>
                 <a href="https://x.com/soy_Khales" target="_blank"><svg class="social-icon" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
             </div>
@@ -140,22 +143,10 @@
                     <div id="stars" class="stars-row"></div>
                 </div>
                 <div class="btn-group">
-                    <a id="btn-trailer" href="#" target="_blank" class="btn-app btn-trailer">
-                        <svg class="btn-icon icon-square" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        Tráiler
-                    </a>
-                    <a id="btn-imdb" href="#" target="_blank" class="btn-app btn-imdb">
-                        <svg class="btn-icon icon-wide" viewBox="0 0 48 24" fill="currentColor"><path d="M44 0H4C1.8 0 0 1.8 0 4v16c0 2.2 1.8 4 4 4h40c2.2 0 4-1.8 4-4V4c0-2.2-1.8-4-4-4zM11.5 17.5H8.7V7.2h2.8v10.3zm10.5 0h-2.7V11l-1.6 5.1h-1.8l-1.6-5.1v6.5h-2.7V7.2h3.4l1.8 5.6 1.8-5.6h3.4v10.3zm9-.3c0 1.4-1 2.2-2.6 2.2h-4.2V7.2h4.3c1.5 0 2.5.8 2.5 2.1v1.1c0 .9-.5 1.5-1.2 1.7.9.2 1.2.9 1.2 1.9v1.2zm7.3.3h-4.3V7.2h4.1c1.8 0 2.9 1.1 2.9 2.8v4.7c0 1.7-1.1 2.8-2.7 2.8zm-11-7.8c0-.4-.3-.6-.7-.6h-.6v2.5h.6c.4 0 .7-.2.7-.6V9.7zm.1 4.1c0-.4-.3-.6-.7-.6h-.7v2.5h.7c.4 0 .7-.2.7-.6v-1.3zm10.9-4c0-.7-.4-1.1-1.1-1.1h-1.2v10.3h1.2c.7 0 1.1-.4 1.1-1.1V9.8z"/></svg>
-                        IMDb
-                    </a>
-                    <a id="btn-lb" href="#" target="_blank" class="btn-app btn-lb">
-                        <svg class="btn-icon icon-square" viewBox="0 0 24 24"><circle fill="#00e054" cx="6" cy="12" r="5" fill-opacity="0.9"/><circle fill="#ff8000" cx="12" cy="12" r="5" fill-opacity="0.9"/><circle fill="#40bcf4" cx="18" cy="12" r="5" fill-opacity="0.9"/></svg>
-                        Letterboxd
-                    </a>
-                    <a id="btn-tmdb" href="#" target="_blank" class="btn-app btn-tmdb">
-                        <svg class="btn-icon icon-square" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5l-4.5-4.5 1.41-1.41L11 14.67l6.59-6.59L19 9.5l-8 8z"/></svg>
-                        TMDB
-                    </a>
+                    <a id="btn-trailer" href="#" target="_blank" class="btn-app btn-trailer">Tráiler</a>
+                    <a id="btn-imdb" href="#" target="_blank" class="btn-app btn-imdb">IMDb</a>
+                    <a id="btn-lb" href="#" target="_blank" class="btn-app btn-lb">Letterboxd</a>
+                    <a id="btn-tmdb" href="#" target="_blank" class="btn-app btn-tmdb">TMDB</a>
                 </div>
             </div>
         </div>
