@@ -60,7 +60,7 @@
         /* ESTRELLAS LILA */
         .stars-row { color: var(--primary); font-size: 1.2rem; margin-top: 8px; letter-spacing: 1px; }
 
-        /* BOTONES CON ICONOS LOGOS */
+        /* BOTONES CON ICONOS LOGOS FIJADOS */
         .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
         .btn-app {
             background: #2c3440; color: white; border: none; padding: 10px 12px; border-radius: 5px;
@@ -68,7 +68,7 @@
             transition: 0.2s; white-space: nowrap; flex: 1; min-width: 85px;
             display: inline-flex; align-items: center; justify-content: center; gap: 6px;
         }
-        .btn-icon { width: 14px; height: 14px; vertical-align: middle; }
+        .btn-icon { width: 14px; height: 14px; display: inline-block; flex-shrink: 0; }
         
         .btn-trailer:hover { background: var(--yt-red) !important; }
         .btn-imdb:hover { background: var(--imdb-gold) !important; color: black; }
@@ -141,15 +141,15 @@
                         Tráiler
                     </a>
                     <a id="btn-imdb" href="#" target="_blank" class="btn-app btn-imdb">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.32 13.06c0 .48-.38.86-.86.86H10.1c-.48 0-.86-.38-.86-.86V8.94c0-.48.38-.86.86-.86H14.46c.48 0 .86.38.86.86v6.12z"/></svg>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M22.05 2H1.95C.88 2 0 2.88 0 3.95v16.1C0 21.12.88 22 1.95 22h20.1c1.07 0 1.95-.88 1.95-1.95V3.95C24 2.88 23.12 2 22.05 2zM6.55 17.55H4.63V7.22h1.92v10.33zm5.72 0H10.4V10.3l-1.32 4.63H8.16l-1.3-4.63v4.91H5.15V7.22h2.2l1.32 4.4 1.34-4.4h2.26v10.33zm5.1-2.42c0 1.6-1.12 2.42-2.73 2.42h-1.92V7.22h2.04c1.47 0 2.61.8 2.61 2.37v5.54zm2.63 2.42h-1.92V7.22h1.92c1.32 0 2.35.73 2.35 2.15v1.23c0 .94-.52 1.62-1.32 1.86.94.24 1.48.97 1.48 2.06v1.01c0 1.3-.9 2.02-2.51 2.02zm-4.75-2.22c0 .6.42.92.97.92h.2c.57 0 .93-.32.93-.92V9.8c0-.52-.36-.88-.93-.88h-.2c-.55 0-.97.36-.97.88v5.33zm4.56-5.17c0-.44-.3-.68-.8-.68h-.12v1.5h.12c.5 0 .8-.23.8-.82v-.02zm.12 4.31c0 .48-.34.73-.85.73h-.15v-1.63h.15c.51 0 .85.25.85.75v.15z"/></svg>
                         IMDb
                     </a>
                     <a id="btn-lb" href="#" target="_blank" class="btn-app btn-lb">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7.75 12a4.25 4.25 0 1 1 8.5 0 4.25 4.25 0 0 1-8.5 0zm-4.25 0a4.25 4.25 0 1 1 4.25-4.25A4.25 4.25 0 0 1 3.5 12zm17 0a4.25 4.25 0 1 1-4.25-4.25A4.25 4.25 0 0 1 20.5 12z"/></svg>
+                        <svg class="btn-icon" viewBox="0 0 24 24"><circle fill="#00e054" cx="6" cy="12" r="5" fill-opacity="0.85"/><circle fill="#ff8000" cx="12" cy="12" r="5" fill-opacity="0.85"/><circle fill="#40bcf4" cx="18" cy="12" r="5" fill-opacity="0.85"/></svg>
                         Letterboxd
                     </a>
                     <a id="btn-tmdb" href="#" target="_blank" class="btn-app btn-tmdb">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a11.7 11.7 0 1 0 11.7 11.7A11.7 11.7 0 0 0 12 .3zm4.5 13.9a2.3 2.3 0 0 1-2.3 2.3H9.8a2.3 2.3 0 0 1-2.3-2.3v-4.4a2.3 2.3 0 0 1 2.3-2.3h4.4a2.3 2.3 0 0 1 2.3 2.3zm-1.8-4.4a.5.5 0 0 0-.5-.5h-4.4a.5.5 0 0 0-.5.5v4.4a.5.5 0 0 0 .5.5h4.4a.5.5 0 0 0 .5-.5z"/></svg>
                         TMDB
                     </a>
                 </div>
